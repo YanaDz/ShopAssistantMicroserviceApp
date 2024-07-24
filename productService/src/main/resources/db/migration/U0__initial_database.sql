@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS purchase;
+
+DROP TABLE IF EXISTS product;
+
+DROP TABLE IF EXISTS seller;
+
+DROP TABLE IF EXISTS firm;
+
+DROP TABLE IF EXISTS product_translation;

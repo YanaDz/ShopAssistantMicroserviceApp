@@ -1,14 +1,11 @@
 package pl.dziadkouskaya.graphql.entity.dto;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.OneToMany;
-import lombok.Builder;
-import pl.dziadkouskaya.graphql.entity.Product;
+import lombok.Data;
+import lombok.NonNull;
 
-import java.util.List;
-import java.util.UUID;
-
+@Data
 public class FirmParams {
+    @NonNull
     private String name;
 
 }

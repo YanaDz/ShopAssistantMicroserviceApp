@@ -5,5 +5,5 @@ import pl.dziadkouskaya.graphql.entity.Firm;
 import java.util.List;
 
 public interface CustomFirmRepository {
-    public List<Firm> findFirmByName(String name);
+    List<Firm> findFirmByName(String name);
 }

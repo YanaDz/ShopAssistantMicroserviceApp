@@ -7,5 +7,5 @@ import pl.dziadkouskaya.graphql.entity.Seller;
 import java.util.UUID;
 
 @Repository
-public interface SellerRepository extends JpaRepository<Seller, UUID> {
+public interface SellerRepository extends JpaRepository<Seller, UUID>, CustomSellerRepository {
 }

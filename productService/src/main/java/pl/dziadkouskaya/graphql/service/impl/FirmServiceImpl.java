@@ -59,7 +59,7 @@ public class FirmServiceImpl implements FirmService {
         if (firms.isEmpty()) {
             throw new ResourceNotFoundException("There is firm with name " + name);
         }
-        log.info("Found {} firms with name {}.", name);
+        log.info("Found {} firms with name {}.", firms.size(), name);
         return firms.stream()
                 .map(firmMapper::toDto)
                 .toList();

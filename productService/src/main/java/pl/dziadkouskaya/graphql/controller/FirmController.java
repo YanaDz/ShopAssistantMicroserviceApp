@@ -2,6 +2,7 @@ package pl.dziadkouskaya.graphql.controller;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import pl.dziadkouskaya.graphql.entity.dto.FirmDto;
 import pl.dziadkouskaya.graphql.entity.dto.FirmParams;
@@ -19,6 +20,7 @@ public class FirmController {
     private final FirmService firmService;
 
     @PostMapping(consumes = "application/json", produces = "application/json")
+    @ResponseStatus(HttpStatus.CREATED)
     public FirmDto createFirm(@RequestBody FirmParams firmParams) {
         return firmService.createFirm(firmParams);
     }

@@ -18,5 +18,6 @@ public class Constants {
     public static final String ERROR_SERVER_INTERNAL = "Internal server error.";
     public static final String ERROR_ACCESS_DENIED = "Access is denied";
     public static final String ERROR_BAD_REQUEST = "Bad request.";
+    public static final String RESOURCE_EXESTED = "Entity with such params existed";
 
 }

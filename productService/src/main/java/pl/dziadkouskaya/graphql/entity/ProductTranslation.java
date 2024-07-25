@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import pl.dziadkouskaya.graphql.entity.enums.Location;
+import pl.dziadkouskaya.graphql.entity.enums.TranslationType;
 
 import java.util.UUID;
 
@@ -24,12 +25,15 @@ public class ProductTranslation extends AuditableEntity {
     @EqualsAndHashCode.Include
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Product product;
+    @Column(name = "translation_type")
+    private TranslationType translationType;
 
     @Column(name = "location")
     private Location location;
 
     @Column(name = "location_translation")
     private String locationTranslation;
+
+    @Column(name = "basic_translation_id")
+    private UUID basicTranslationId;
 }

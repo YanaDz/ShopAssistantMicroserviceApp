@@ -44,6 +44,11 @@ public class RestExceptionHandler {
         return handleInternal(ex, HttpStatus.NOT_FOUND, RESOURCE_NOT_FOUND);
     }
 
+    @ExceptionHandler(ResourceExistedException.class)
+    public ResponseEntity<RestErrorResponse> handleAccessDeniedException(ResourceExistedException ex, WebRequest request) {
+        return handleInternal(ex, CONFLICT, RESOURCE_EXESTED);
+    }
+
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<RestErrorResponse> handleAccessDeniedException(AccessDeniedException ex, WebRequest request) {
         return handleInternal(ex, FORBIDDEN, ERROR_ACCESS_DENIED);

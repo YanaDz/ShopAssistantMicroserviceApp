@@ -36,4 +36,10 @@ public class SellerController {
     public List<SellerDto> getFirmsByName(@RequestParam String name) {
         return sellerService.getSellersByName(name);
     }
+
+    @PutMapping(value = "/{id}", produces = "application/json")
+    public SellerDto updateSeller(@PathVariable UUID id, @RequestBody SellerParam param) {
+        return sellerService.updateSeller(id, param);
+    }
 }
+

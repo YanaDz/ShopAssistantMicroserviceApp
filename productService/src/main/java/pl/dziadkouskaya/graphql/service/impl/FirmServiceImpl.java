@@ -2,6 +2,7 @@ package pl.dziadkouskaya.graphql.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import pl.dziadkouskaya.graphql.entity.Firm;
 import pl.dziadkouskaya.graphql.entity.dto.FirmDto;
 import pl.dziadkouskaya.graphql.entity.dto.FirmParams;
 import pl.dziadkouskaya.graphql.exception.ResourceNotFoundException;
@@ -44,7 +45,7 @@ public class FirmServiceImpl implements FirmService {
     }
 
     @Override
-    public FirmDto getFirmById(UUID uuid) {
+    public FirmDto getFirmDtoById(UUID uuid) {
         var firm = firmRepository.findById(uuid);
         if (firm.isEmpty()) {
             throw new ResourceNotFoundException("There is firm with id " + uuid);
@@ -63,5 +64,14 @@ public class FirmServiceImpl implements FirmService {
         return firms.stream()
                 .map(firmMapper::toDto)
                 .toList();
+    }
+
+    @Override
+    public Firm getFirmById(UUID uuid) {
+        var firm = firmRepository.findById(uuid);
+        if (firm.isEmpty()) {
+            throw new ResourceNotFoundException("There is firm with id " + uuid);
+        }
+        return firm.get();
     }
 }

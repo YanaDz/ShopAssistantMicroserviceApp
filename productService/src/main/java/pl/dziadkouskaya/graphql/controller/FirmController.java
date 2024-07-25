@@ -30,7 +30,7 @@ public class FirmController {
 
     @GetMapping(value = "/{id}", produces = "application/json")
     public FirmDto getFirm(@PathVariable("id") UUID id) {
-        return firmService.getFirmById(id);
+        return firmService.getFirmDtoById(id);
     }
 
     @GetMapping(value = "/search", produces = "application/json")

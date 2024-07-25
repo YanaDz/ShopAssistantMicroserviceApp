@@ -9,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 import pl.dziadkouskaya.graphql.entity.enums.Location;
 import pl.dziadkouskaya.graphql.entity.enums.TranslationType;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -36,4 +37,7 @@ public class ProductTranslation extends AuditableEntity {
 
     @Column(name = "basic_translation_id")
     private UUID basicTranslationId;
+
+    @ManyToMany(mappedBy = "productTranslations")
+    private List<Product> productTranslations;
 }

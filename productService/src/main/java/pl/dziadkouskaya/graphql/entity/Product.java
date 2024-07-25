@@ -30,8 +30,13 @@ public class Product extends AuditableEntity {
     @Column(name = "name")
     private String name;
 
-//    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "product", orphanRemoval = true)
-//    private List<ProductTranslation> productTranslations;
+    @ManyToMany
+    @JoinTable(
+            name = "translations_products",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_translation_id")
+    )
+    private List<ProductTranslation> productTranslations;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "firm_id")

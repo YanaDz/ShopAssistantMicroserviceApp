@@ -7,7 +7,8 @@ import java.util.Map;
 
 public enum TranslationType implements BaseEnum<TranslationType> {
     MAIN(0),
-    ADDITIONAL(1);
+    ADDITIONAL(1),
+    NOT_DETERMINED(2);
 
     private int code;
 

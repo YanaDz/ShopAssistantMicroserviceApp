@@ -23,7 +23,7 @@ public class CustomProductTranslationRepositoryImpl implements CustomProductTran
     private EntityManager entityManager;
 
     @Override
-    public List<ProductTranslation> getTranslationByStrictName(String name, Location location) {
+    public List<ProductTranslation> getMainTranslationByStrictName(String name, Location location) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<ProductTranslation> cq = cb.createQuery(ProductTranslation.class);
         Root<ProductTranslation> root = cq.from(ProductTranslation.class);
@@ -60,6 +60,20 @@ public class CustomProductTranslationRepositoryImpl implements CustomProductTran
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(cb.equal(root.get("translationType"), TranslationType.ADDITIONAL));
         predicates.add(cb.equal(root.get("basicTranslationId"), id));
+
+        cq.where(predicates.toArray(new Predicate[0]));
+        return entityManager.createQuery(cq).getResultList();
+    }
+
+    @Override
+    public List<ProductTranslation> getMainTranslationByStrictName(String name) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<ProductTranslation> cq = cb.createQuery(ProductTranslation.class);
+        Root<ProductTranslation> root = cq.from(ProductTranslation.class);
+
+        List<Predicate> predicates = new ArrayList<>();
+        predicates.add(cb.equal(root.get("translationType"), TranslationType.MAIN));
+        predicates.add(cb.like(cb.lower(root.get("locationTranslation")), name.toLowerCase()));
 
         cq.where(predicates.toArray(new Predicate[0]));
         return entityManager.createQuery(cq).getResultList();

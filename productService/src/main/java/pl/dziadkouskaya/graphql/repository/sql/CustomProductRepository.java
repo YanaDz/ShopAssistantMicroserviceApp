@@ -1,6 +1,7 @@
 package pl.dziadkouskaya.graphql.repository.sql;
 
 import pl.dziadkouskaya.graphql.entity.Product;
+import pl.dziadkouskaya.graphql.entity.enums.ProductType;
 
 import java.util.List;
 

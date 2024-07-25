@@ -1,22 +1,24 @@
-package pl.dziadkouskaya.graphql.entity.filters;
+package pl.dziadkouskaya.graphql.entity.param;
 
-import jakarta.persistence.Enumerated;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
+import pl.dziadkouskaya.graphql.entity.Firm;
+import pl.dziadkouskaya.graphql.entity.ProductTranslation;
 import pl.dziadkouskaya.graphql.entity.enums.ProductType;
+
+import java.util.List;
+import java.util.UUID;
 
 @Data
 @Jacksonized
 @SuperBuilder
 @EqualsAndHashCode(callSuper = false)
-public class ProductFilter {
+public class ProductParams {
     private String name;
-
-    private ProductType productType;
-
-    private String firm;
-
+    private UUID firmId;
     private String productVersion;
+    private ProductType productType;
 }

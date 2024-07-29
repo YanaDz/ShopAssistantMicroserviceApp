@@ -1,6 +1,7 @@
 package pl.dziadkouskaya.graphql.controller;
 
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class FirmController {
 
     @PostMapping(consumes = "application/json", produces = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
-    public FirmDto createFirm(@RequestBody FirmParams firmParams) {
+    public FirmDto createFirm(@RequestBody @Valid FirmParams firmParams) {
         return firmService.createFirm(firmParams);
     }
 
@@ -36,7 +37,7 @@ public class FirmController {
     }
 
     @GetMapping(value = "/search", produces = "application/json")
-    public List<FirmDto> getFirmsByName(@RequestParam String name) {
+    public List<FirmDto> getFirmsByName(@RequestParam @Valid String name) {
         return firmService.getFirmsByName(name);
     }
 }

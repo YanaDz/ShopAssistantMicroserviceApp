@@ -1,4 +1,4 @@
-package pl.dziadkouskaya.graphql.exception;
+package pl.dziadkouskaya.search_server.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -18,7 +18,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.*;
-import static pl.dziadkouskaya.graphql.utils.Constants.*;
+import static pl.dziadkouskaya.search_server.utils.Constants.*;
 
 @Slf4j
 @ControllerAdvice
@@ -44,10 +44,6 @@ public class RestExceptionHandler {
         return handleInternal(ex, HttpStatus.NOT_FOUND, RESOURCE_NOT_FOUND);
     }
 
-    @ExceptionHandler(ResourceExistedException.class)
-    public ResponseEntity<RestErrorResponse> handleResourceExistedException(ResourceExistedException ex, WebRequest request) {
-        return handleInternal(ex, CONFLICT, RESOURCE_EXESTED);
-    }
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<RestErrorResponse> handleAccessDeniedException(AccessDeniedException ex, WebRequest request) {

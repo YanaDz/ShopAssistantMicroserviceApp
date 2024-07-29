@@ -12,6 +12,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import pl.dziadkouskaya.graphql.ProductServiceApplication;
 import pl.dziadkouskaya.graphql.entity.dto.FirmParams;
+import pl.dziadkouskaya.graphql.repository.sql.FirmRepository;
 
 @SpringBootTest(classes = ProductServiceApplication.class)
 @Testcontainers
@@ -32,6 +33,9 @@ abstract class AbstractApplicationTests {
 
     @Autowired
     protected ObjectMapper objectMapper;
+
+    @Autowired
+    protected FirmRepository firmRepository;
 
     public static final String PATH_FIRM_CONTROLLER = "/firm";
 

@@ -1,2 +1,0 @@
-rootProject.name = 'united-service'
-include 'search-service', 'productService'

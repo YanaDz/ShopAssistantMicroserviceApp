@@ -1,1 +1,0 @@
-org.springframework.boot.env.EnvironmentPostProcessor=pl.dziadkouskaya.graphql.configuration.DotenvApplicationInitializer

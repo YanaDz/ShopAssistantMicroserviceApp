@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import pl.dziadkouskaya.graphql.entity.Product;
 import pl.dziadkouskaya.graphql.entity.ProductTranslation;
 import pl.dziadkouskaya.graphql.entity.dto.ProductDto;
-import pl.dziadkouskaya.graphql.entity.enums.ProductType;
 import pl.dziadkouskaya.graphql.entity.filters.ProductFilter;
 import pl.dziadkouskaya.graphql.entity.param.ProductParams;
 import pl.dziadkouskaya.graphql.exception.ResourceNotFoundException;
@@ -29,7 +28,8 @@ public class ProductServiceImpl implements ProductService {
     private final FirmService firmService;
     private final ProductTranslationService translationService;
 
-    public ProductServiceImpl(ProductRepository productRepository, ProductMapper productMapper, FirmService firmService, ProductTranslationService translationService) {
+    public ProductServiceImpl(ProductRepository productRepository, ProductMapper productMapper, FirmService firmService,
+                              ProductTranslationService translationService) {
         this.productRepository = productRepository;
         this.productMapper = productMapper;
         this.firmService = firmService;
@@ -42,23 +42,22 @@ public class ProductServiceImpl implements ProductService {
         var products = productRepository.findAll();
         log.info("Returned {} products. ", products.size());
         return products.stream()
-                .map(product -> productMapper.toDto(product, firmService.getFirmDtoById(product.getFirm().getId()),
-                        translationService.getTranslationDto(product.getProductTranslations())))
-                .toList();
+            .map(product -> productMapper.toDto(product, firmService.getFirmDtoById(product.getFirm().getId()),
+                translationService.getTranslationDto(product.getProductTranslations())))
+            .toList();
     }
 
 
     @Override
     public List<ProductDto> getProductsByFields(ProductFilter filter) {
         log.info("Get products by params: {}.", filter);
-        var typeCode = filter.getProductType().getCode();
         var products = productRepository.findByFilters(filter.getName(), filter.getFirm(),
-                filter.getProductType().getCode(), filter.getProductVersion());
+            filter.getProductType().getCode(), filter.getProductVersion());
         log.info("Returned {} products. ", products.size());
         return products.stream()
-                .map(product -> productMapper.toDto(product, firmService.getFirmDtoById(product.getFirm().getId()),
-                        translationService.getTranslationDto(product.getProductTranslations())))
-                .toList();
+            .map(product -> productMapper.toDto(product, firmService.getFirmDtoById(product.getFirm().getId()),
+                translationService.getTranslationDto(product.getProductTranslations())))
+            .toList();
     }
 
     @Override
@@ -69,7 +68,7 @@ public class ProductServiceImpl implements ProductService {
             throw new ResourceNotFoundException(String.format("There is no product with id %s", id));
         }
         return productMapper.toDto(product.get(), firmService.getFirmDtoById(product.get().getFirm().getId()),
-                translationService.getTranslationDto(product.get().getProductTranslations()));
+            translationService.getTranslationDto(product.get().getProductTranslations()));
     }
 
     @Override
@@ -93,10 +92,10 @@ public class ProductServiceImpl implements ProductService {
         var product = productRepository.save(initialProduct);
         log.info("Create entity with id {}.", product.getId());
         translations.stream()
-                .forEach(translation -> {
-                    translation.getProductTranslations().add(product);
-                    translationService.updateTranslation(translation);
-                });
+            .forEach(translation -> {
+                translation.getProductTranslations().add(product);
+                translationService.updateTranslation(translation);
+            });
         return productMapper.toDto(product, firm, translationService.getTranslationDto(translations));
     }
 
@@ -111,7 +110,7 @@ public class ProductServiceImpl implements ProductService {
         var product = productRepository.save(updatedProduct);
         log.info("Update entity with id {}.", product.getId());
         return productMapper.toDto(product, firmService.getFirmDtoById(product.getFirm().getId()),
-                translationService.getTranslationDto(product.getProductTranslations()));
+            translationService.getTranslationDto(product.getProductTranslations()));
 
     }
 

@@ -29,6 +29,7 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public List<SearchResult> getSellerProducts(String request) {
         var allSellers = sellerRepository.findAll();
+        log.info("Found {} sellers.", allSellers.size());
         var products = allSellers.parallelStream()
             .peek(seller -> log.info("Start getting results from seller {}.", seller.getName()))
             .map(seller -> {
@@ -78,23 +79,21 @@ public class SearchServiceImpl implements SearchService {
                 String price = product.select(seller.getPriceClass()).text();
 
                 // Add result to list
-                results.add(buildSearchResult(seller, name, price, link));
+                results.add(buildSearchResult(seller.getName(), name, price, link));
             }
 
-            // Print the number of product containers found
-            log.info("Number of product containers: " + results.size());
+            log.info("Number of product containers of seller {} is {}.", seller.getName(), results.size());
         } finally {
-            // Close the browser
             webDriver.quit();
         }
 
         return results;
     }
 
-    private SearchResult buildSearchResult(Seller seller, String name, String price, String url) {
+    private SearchResult buildSearchResult(String seller, String name, String price, String url) {
         return SearchResult.builder()
             .name(name)
-            .seller(seller.getName())
+            .seller(seller)
             .price(price)
             .url(url)
             .build();

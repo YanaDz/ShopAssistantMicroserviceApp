@@ -7,26 +7,26 @@ services:
     environment:
       POSTGRES_DB: search_service
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: admin
+      POSTGRES_PASSWORD: postgres
     ports:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  product-service-app:
-    image: search-service-app-image
-    container_name: search-service-app
-    depends_on:
-      - search-postgres
-    ports:
-      - "8081:8081"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5433/search_service
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: admin
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
-    networks:
-      - spring-boot-postgres-network
+#  product-service-app:
+#    image: search-service-app-image
+#    container_name: search-service-app
+#    depends_on:
+#      - search-postgres
+#    ports:
+#      - "8081:8081"
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5433/search_service
+#      SPRING_DATASOURCE_USERNAME: postgres
+#      SPRING_DATASOURCE_PASSWORD: admin
+#      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+#    networks:
+#      - spring-boot-postgres-network
 
 volumes:
   postgres_data:

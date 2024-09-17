@@ -1,13 +1,11 @@
 HELP.md
 .gradle
-.env
-.graflew
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-.idea/
-backlog.txt
+gradle/
+.gradle/
 
 ### STS ###
 .apt_generated
@@ -39,4 +37,3 @@ out/
 
 ### VS Code ###
 .vscode/
-

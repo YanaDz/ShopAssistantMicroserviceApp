@@ -42,6 +42,10 @@ dependencies {
 	implementation group: 'jakarta.validation', name: 'jakarta.validation-api', version: '3.1.0'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	// Selenium Java
+	implementation 'org.seleniumhq.selenium:selenium-java:4.5.0'
+	// WebDriverManager to automatically manage driver binaries
+	implementation 'io.github.bonigarcia:webdrivermanager:5.3.2'
 }
 
 tasks.named('test') {

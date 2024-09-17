@@ -1,19 +1,24 @@
 package pl.dziadkouskaya.search_server.service.impl;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.stereotype.Service;
 import pl.dziadkouskaya.search_server.entity.Seller;
 import pl.dziadkouskaya.search_server.entity.dto.SearchResult;
+import pl.dziadkouskaya.search_server.exception.ShopNotAvailableException;
 import pl.dziadkouskaya.search_server.repository.SellerRepository;
 import pl.dziadkouskaya.search_server.service.SearchService;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
+@Slf4j
 public class SearchServiceImpl implements SearchService {
     private final SellerRepository sellerRepository;
 
@@ -22,47 +27,76 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public List<SearchResult> getSearchResults(Seller seller, String request) {
-        return List.of();
+    public List<SearchResult> getSellerProducts(String request) {
+        var allSellers = sellerRepository.findAll();
+        var products = allSellers.parallelStream()
+            .peek(seller -> log.info("Start getting results from seller {}.", seller.getName()))
+            .map(seller -> {
+                try {
+                    return getSearchResults(request, seller);
+                } catch (InterruptedException e) {
+                    throw new ShopNotAvailableException(String.format("Shop %s is not available now", seller.getName()));
+                }
+            })
+            .flatMap(List::stream)
+            .toList();
+        log.info("Received {} products for request {}.", products.size(), request);
+        return products;
     }
 
     @Override
-    public List<SearchResult> getSearchResults(String request) throws IOException {
-//
-//        String searchUrl = "https://mediamarkt.pl/pl/search.html?query=" + request;
-//        Document doc = Jsoup.connect(searchUrl).get();
-//        Element productElement = doc.selectFirst(".sc-b0c0d999-0 hHtrNC"); // Update the CSS query based on the actual website structure
-//
-//        if (productElement != null) {
-//            String fullProductName = productElement.selectFirst(".sc-3f2da4f5-0 fLePRG").text();
-////            String productProducer = productElement.selectFirst(".product-brand").text();
-////            String productFeatures = productElement.selectFirst(".product-features").text();
-//            String price = productElement.selectFirst(".sc-3f2da4f5-0 dievjx sc-dd1a61d2-2 efAprc").text();
-//
-//            var searchResults = SearchResult.builder()
-//                    .name(fullProductName)
-//                    .price(price)
-//                    .build();
-//
-//            return List.of(searchResults);
-//        }
-        String name = "Telewizor QLED Samsung QE75Q60C 75";
-        var ceneo = sellerRepository.findById(UUID.fromString("ab4a818f-85b5-4204-aac0-565e63ceebab")).get();
-        var rtv = sellerRepository.findById(UUID.fromString("87c19627-f579-4e07-a5bd-0e6f91468ed2")).get();
-        var mediamarkt = sellerRepository.findById(UUID.fromString("f2db4525-b593-4965-bdf2-d2ef7ae67c97")).get();
-        var productCeneo = buildSearchResult(ceneo, name, "3856");
-        var productRtv = buildSearchResult(rtv, name, "4999");
-        var productMedia = buildSearchResult(mediamarkt, name, "6799");
+    public List<SearchResult> getSearchResults(String request, Seller seller) throws InterruptedException {
+        WebDriverManager.chromedriver().setup();
+        WebDriver webDriver = new FirefoxDriver();
 
-        return List.of(productCeneo, productRtv, productMedia);
+        List<SearchResult> results = new ArrayList<>();
+        try {
+            String url = seller.getSearchUrl() + request;
+            webDriver.get(url);
 
+            // Wait for the page to fully load
+            Thread.sleep(1000);
+
+            // Get the page source after it has been fully rendered
+            String pageSource = webDriver.getPageSource();
+
+            // Use Jsoup to parse the page source
+            Document doc = Jsoup.parse(pageSource);
+
+            // Select all product containers
+            Elements productContainers = doc.select(String.format("div[class^='%s']", seller.getTitleClass()));
+
+            // Process the elements
+            for (org.jsoup.nodes.Element product : productContainers) {
+                // Extract product name
+                String name = product.select(String.format("div[class*='%s']", seller.getTitleProductElement())).text();
+
+                // Extract product URL
+                String link = product.select("a").attr("href");
+
+                // Extract product price
+                String price = product.select(seller.getPriceClass()).text();
+
+                // Add result to list
+                results.add(buildSearchResult(seller, name, price, link));
+            }
+
+            // Print the number of product containers found
+            log.info("Number of product containers: " + results.size());
+        } finally {
+            // Close the browser
+            webDriver.quit();
+        }
+
+        return results;
     }
 
-    private SearchResult buildSearchResult(Seller seller, String name, String price) {
+    private SearchResult buildSearchResult(Seller seller, String name, String price, String url) {
         return SearchResult.builder()
-                .name(name)
-                .seller(seller)
-                .price(price)
-                .build();
+            .name(name)
+            .seller(seller.getName())
+            .price(price)
+            .url(url)
+            .build();
     }
 }

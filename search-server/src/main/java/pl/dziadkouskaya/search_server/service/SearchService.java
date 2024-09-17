@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface SearchService {
-    List<SearchResult> getSearchResults(Seller seller, String request);
-    List<SearchResult> getSearchResults(String request) throws IOException;
+    List<SearchResult> getSellerProducts(String request);
+    List<SearchResult> getSearchResults(String request, Seller seller) throws IOException, InterruptedException;
 
 }

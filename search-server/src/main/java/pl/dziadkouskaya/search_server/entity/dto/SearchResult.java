@@ -11,7 +11,7 @@ import pl.dziadkouskaya.search_server.entity.Seller;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = false)
 public class SearchResult {
-    private Seller seller;
+    private String seller;
     private String name;
     private String url;
     private String price;

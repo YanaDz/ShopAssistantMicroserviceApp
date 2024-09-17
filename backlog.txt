@@ -1,0 +1,2 @@
+search-server:
+1. search when request contains more than 1 page

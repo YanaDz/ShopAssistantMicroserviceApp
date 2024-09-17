@@ -23,8 +23,8 @@ public class SearchController {
 
 
     @GetMapping
-    public List<SearchResult> getSearchResults(@RequestParam String searchRequest) throws IOException {
-        return searchService.getSearchResults(searchRequest);
+    public List<SearchResult> getSearchResults(@RequestParam String searchRequest) throws IOException, InterruptedException {
+        return searchService.getSellerProducts(searchRequest);
     }
 
 

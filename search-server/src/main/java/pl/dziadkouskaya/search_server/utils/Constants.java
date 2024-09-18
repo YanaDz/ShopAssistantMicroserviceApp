@@ -9,5 +9,20 @@ public class Constants {
     public static final String RESOURCE_EXESTED = "Entity with such params existed";
     public static final String FIRM_NAME_NOT_NULL = "Firm name can't be null";
     public static final String FIRM_NAME_NOT_EMPTY = "Firm name can't be empty";
+    public static final String SHOP_CONNECTION_IS_NOT_AVAILABLE = "Shop %s is not available now, exception: {}.";
+    public static final String ERROR_PARSING_PRICE = "The product's prices are not found for the seller %s.";
+    public static final String ERROR_PARSING_TITLE ="The product's titles are not found for the seller %s.";
+    public static final String ERROR_PARSING_NO_ONE_OR_MAIN_PRIORITY ="The titles for the seller %s contain no ONE or MAIN priority title.";
+
+
+    // Utils
+    public static final String SPACE = " ";
+    public static final String SEMICOLON = ";";
+
+    //parsing
+    public static final String DIV_STARTS_WITH = "div[class^='%s]";
+    public static final String DIV_CONTAINS = "div[class*='%s']";
+    public static final String LINK = "a";
+    public static final String HREF_ATTRIBUTE = "href";
 
 }

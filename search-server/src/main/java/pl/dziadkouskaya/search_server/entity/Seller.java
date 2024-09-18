@@ -1,19 +1,30 @@
 package pl.dziadkouskaya.search_server.entity;
 
 
-import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.SuperBuilder;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import pl.dziadkouskaya.search_server.entity.enums.Location;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "seller")
 @Data
-@SuperBuilder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Seller extends AuditableEntity {
     @Id
@@ -33,13 +44,13 @@ public class Seller extends AuditableEntity {
 
     private String titleClass;
 
-    private String titleProductElement;
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "seller", orphanRemoval = true)
+    private List<SellerElement> titleProductElements = new ArrayList<>();
 
-    private  String priceClass;
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "seller", orphanRemoval = true)
+    private List<SellerElement> prices = new ArrayList<>();
 
-    private String priceElement;
-
+    @Column(name = "product_url")
     private String productUrl;
-
 
 }

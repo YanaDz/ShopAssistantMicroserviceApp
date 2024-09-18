@@ -9,13 +9,35 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.stereotype.Service;
 import pl.dziadkouskaya.search_server.entity.Seller;
+import pl.dziadkouskaya.search_server.entity.dto.ComplexTitlePart;
 import pl.dziadkouskaya.search_server.entity.dto.SearchResult;
+import pl.dziadkouskaya.search_server.entity.enums.SellerElementField;
+import pl.dziadkouskaya.search_server.entity.enums.SellerElementPriority;
+import pl.dziadkouskaya.search_server.entity.enums.SellerElementType;
+import pl.dziadkouskaya.search_server.exception.ResourceNotFoundException;
+import pl.dziadkouskaya.search_server.exception.SellerParsingException;
 import pl.dziadkouskaya.search_server.exception.ShopNotAvailableException;
 import pl.dziadkouskaya.search_server.repository.SellerRepository;
 import pl.dziadkouskaya.search_server.service.SearchService;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static pl.dziadkouskaya.search_server.entity.enums.SellerElementPriority.ADDITIONAL_INCLUDED_ELEMENT_FIRST;
+import static pl.dziadkouskaya.search_server.entity.enums.SellerElementPriority.ADDITIONAL_INCLUDED_ELEMENT_SECOND;
+import static pl.dziadkouskaya.search_server.entity.enums.SellerElementPriority.MAIN_ELEMENT;
+import static pl.dziadkouskaya.search_server.entity.enums.SellerElementPriority.ONE_ELEMENT;
+import static pl.dziadkouskaya.search_server.utils.Constants.DIV_CONTAINS;
+import static pl.dziadkouskaya.search_server.utils.Constants.DIV_STARTS_WITH;
+import static pl.dziadkouskaya.search_server.utils.Constants.ERROR_PARSING_NO_ONE_OR_MAIN_PRIORITY;
+import static pl.dziadkouskaya.search_server.utils.Constants.ERROR_PARSING_PRICE;
+import static pl.dziadkouskaya.search_server.utils.Constants.ERROR_PARSING_TITLE;
+import static pl.dziadkouskaya.search_server.utils.Constants.HREF_ATTRIBUTE;
+import static pl.dziadkouskaya.search_server.utils.Constants.LINK;
+import static pl.dziadkouskaya.search_server.utils.Constants.SEMICOLON;
+import static pl.dziadkouskaya.search_server.utils.Constants.SHOP_CONNECTION_IS_NOT_AVAILABLE;
+import static pl.dziadkouskaya.search_server.utils.Constants.SPACE;
+import static pl.dziadkouskaya.search_server.utils.Validation.checkEmptyString;
 
 @Service
 @Slf4j
@@ -36,7 +58,8 @@ public class SearchServiceImpl implements SearchService {
                 try {
                     return getSearchResults(request, seller);
                 } catch (InterruptedException e) {
-                    throw new ShopNotAvailableException(String.format("Shop %s is not available now", seller.getName()));
+                    throw new ShopNotAvailableException(String.format(SHOP_CONNECTION_IS_NOT_AVAILABLE, seller.getName(),
+                        e.getMessage()));
                 }
             })
             .flatMap(List::stream)
@@ -55,30 +78,25 @@ public class SearchServiceImpl implements SearchService {
             String url = seller.getSearchUrl() + request;
             webDriver.get(url);
 
-            // Wait for the page to fully load
+            // TODO: check how avoid sleep
             Thread.sleep(1000);
 
-            // Get the page source after it has been fully rendered
             String pageSource = webDriver.getPageSource();
 
-            // Use Jsoup to parse the page source
             Document doc = Jsoup.parse(pageSource);
 
-            // Select all product containers
-            Elements productContainers = doc.select(String.format("div[class^='%s']", seller.getTitleClass()));
+            Elements productContainers = doc.select(String.format(DIV_STARTS_WITH, seller.getTitleClass()));
 
-            // Process the elements
             for (org.jsoup.nodes.Element product : productContainers) {
-                // Extract product name
-                String name = product.select(String.format("div[class*='%s']", seller.getTitleProductElement())).text();
+                String price = createPrice(seller, product);
 
-                // Extract product URL
-                String link = product.select("a").attr("href");
+                if (checkEmptyString(price)) {
+                    continue;
+                }
+                String name = createProductTitle(seller, product);
 
-                // Extract product price
-                String price = product.select(seller.getPriceClass()).text();
+                String link = product.select(LINK).attr(HREF_ATTRIBUTE);
 
-                // Add result to list
                 results.add(buildSearchResult(seller.getName(), name, price, link));
             }
 
@@ -98,4 +116,81 @@ public class SearchServiceImpl implements SearchService {
             .url(url)
             .build();
     }
+
+    private String createProductTitle(Seller seller, org.jsoup.nodes.Element product) {
+        var parts = createTitleParts(seller, product);
+        return createComplexTitle(parts, seller.getName());
+    }
+
+    private List<ComplexTitlePart> createTitleParts(Seller seller, org.jsoup.nodes.Element product) {
+        var titles = seller.getTitleProductElements()
+            .stream()
+            .filter(title -> title.getSellerElementField() == SellerElementField.PRODUCT_TITLE)
+            .toList();
+        if (titles.isEmpty()) {
+            throw new SellerParsingException(String.format(ERROR_PARSING_TITLE, seller.getName()));
+        }
+        return titles.stream()
+            .map(title -> {
+                var productTitle =
+                    title.getElementType().any(SellerElementType.A, SellerElementType.SPAN)
+                        ? product.select(title.getElementName()).text()
+                        : product.select(String.format(DIV_CONTAINS, title.getElementName())).text();
+                return ComplexTitlePart.builder()
+                    .titlePart(productTitle)
+                    .priority(title.getPriority())
+                    .build();
+            })
+            .toList();
+    }
+
+    private String createComplexTitle(List<ComplexTitlePart> parts, String sellerName) {
+        var onePartTitle = crateSeparateTitlePart(parts, ONE_ELEMENT);
+        if (!checkEmptyString(onePartTitle)) {
+            return onePartTitle;
+        }
+        var mainPart = crateSeparateTitlePart(parts, MAIN_ELEMENT);
+        if (checkEmptyString(mainPart)) {
+            throw new SellerParsingException(String.format(ERROR_PARSING_NO_ONE_OR_MAIN_PRIORITY, sellerName));
+        }
+        var middlePart = crateSeparateTitlePart(parts, ADDITIONAL_INCLUDED_ELEMENT_FIRST);
+        var endPart = crateSeparateTitlePart(parts, ADDITIONAL_INCLUDED_ELEMENT_SECOND);
+        return mainPart + SEMICOLON + SPACE + middlePart + SPACE + endPart;
+    }
+
+    private String crateSeparateTitlePart(List<ComplexTitlePart> parts, SellerElementPriority priority) {
+        var titlePart = "";
+        var additionalMiddle = parts.stream()
+            .filter(part -> part.getPriority() == priority)
+            .findFirst();
+        if (additionalMiddle.isPresent()) {
+            titlePart = additionalMiddle.get().getTitlePart();
+        }
+        return titlePart;
+
+    }
+
+    private String createPrice(Seller seller, org.jsoup.nodes.Element product) {
+        var prices = seller.getPrices()
+            .stream()
+            .filter(price -> price.getSellerElementField() == SellerElementField.PRODUCT_PRICE)
+            .toList();
+        if (prices.isEmpty()) {
+            throw new ResourceNotFoundException(String.format(ERROR_PARSING_PRICE, seller.getName()));
+        }
+        var specificPrice = prices.stream()
+            .filter(item -> item.getPriority() == SellerElementPriority.ADDITIONAL_ELEMENT_EXCLUDING_MAIN)
+            .findFirst();
+        if (specificPrice.isPresent()) {
+            return product.select(specificPrice.get().getElementName()).text();
+        }
+        var price = prices.stream()
+            .filter(item -> item.getPriority().any(SellerElementPriority.MAIN_ELEMENT, ONE_ELEMENT))
+            .findFirst();
+        if (price.isEmpty()) {
+            throw new ResourceNotFoundException(String.format(ERROR_PARSING_PRICE, seller.getName()));
+        }
+        return product.select(price.get().getElementName()).text();
+    }
 }
+

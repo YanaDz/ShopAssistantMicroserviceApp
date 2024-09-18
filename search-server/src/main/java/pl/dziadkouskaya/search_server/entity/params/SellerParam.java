@@ -8,6 +8,9 @@ import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 import pl.dziadkouskaya.search_server.entity.enums.Location;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Jacksonized
 @SuperBuilder
@@ -25,19 +28,13 @@ public class SellerParam {
     @NotBlank
     private String titleClass;
 
-    private String titleProductElement;
-
     @NotNull
     @NotBlank
     private Location location;
 
-    @NotNull
-    @NotBlank
-    private  String priceClass;
+    private List<SellerElementParam> titleProductElements = new ArrayList<>();
 
-    @NotNull
-    @NotBlank
-    private String priceElement;
+    private List<SellerElementParam> prices = new ArrayList<>();
 
     private String productUrl;
 }

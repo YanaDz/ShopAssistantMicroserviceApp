@@ -11,6 +11,7 @@ import pl.dziadkouskaya.search_server.service.SearchService;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,5 +28,10 @@ public class SearchController {
         return searchService.getSellerProducts(searchRequest);
     }
 
+
+    @GetMapping(value = "/seller", produces = "application/json")
+    public List<SearchResult> getSearchResults(@RequestParam String searchRequest, @RequestParam UUID sellerId) throws IOException, InterruptedException {
+        return searchService.getSellerProducts(searchRequest, sellerId);
+    }
 
 }

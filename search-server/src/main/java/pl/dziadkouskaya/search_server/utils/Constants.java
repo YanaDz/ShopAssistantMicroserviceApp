@@ -14,6 +14,7 @@ public class Constants {
     public static final String ERROR_PARSING_TITLE ="The product's titles are not found for the seller %s.";
     public static final String ERROR_PARSING_NO_ONE_OR_MAIN_PRIORITY ="The titles for the seller %s contain no ONE or MAIN priority title.";
     public static final String ERROR_SELLER_EXISTED = "Seller with name %s or searchUrl %s existed";
+    public static final String ERROR_SELLER_NOT_EXIST = "Seller with id %s doesn't exist";
 
 
     // Utils
@@ -21,7 +22,7 @@ public class Constants {
     public static final String SEMICOLON = ";";
 
     //parsing
-    public static final String DIV_STARTS_WITH = "div[class^='%s]";
+    public static final String DIV_STARTS_WITH = "div[class^='%s']";
     public static final String DIV_CONTAINS = "div[class*='%s']";
     public static final String LINK = "a";
     public static final String HREF_ATTRIBUTE = "href";

@@ -1,6 +1,7 @@
 package pl.dziadkouskaya.search_server.service;
 
 import pl.dziadkouskaya.search_server.entity.Seller;
+import pl.dziadkouskaya.search_server.entity.dto.SellerDto;
 import pl.dziadkouskaya.search_server.entity.enums.Location;
 import pl.dziadkouskaya.search_server.entity.params.SellerParam;
 
@@ -8,10 +9,13 @@ import java.util.List;
 import java.util.UUID;
 
 public interface SellerService {
-    Seller getById(UUID id);
-    List<Seller> getSellers(Location location);
-    List<Seller> getAll();
-    Seller createSeller(SellerParam param);
+    SellerDto getById(UUID id);
+    List<SellerDto> getSellers(Location location);
+    List<SellerDto> getAll();
+    SellerDto createSeller(SellerParam param);
+
+    void verifyExestedSeller(SellerParam param);
+
 
 
 }

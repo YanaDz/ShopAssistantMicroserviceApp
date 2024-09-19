@@ -46,6 +46,15 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
+    public Seller getSellerById(UUID id) {
+        var seller = repository.findById(id);
+        if (seller.isEmpty()) {
+            throw new ResourceNotFoundException(RESOURCE_NOT_FOUND);
+        }
+        return seller.get();
+    }
+
+    @Override
     public List<SellerDto> getSellers(Location location) {
         var sellers = repository.getSellers(location);
         log.info("Find {} sellers from location {}.", sellers.size(), location);
@@ -61,6 +70,13 @@ public class SellerServiceImpl implements SellerService {
         return sellers.stream()
             .map(sellerMapper::toDto)
             .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Seller> getAllSellers() {
+        var sellers = repository.findAll();
+        log.info("Find {} sellers.", sellers.size());
+        return sellers;
     }
 
     @Override

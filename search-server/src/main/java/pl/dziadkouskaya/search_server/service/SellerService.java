@@ -10,8 +10,10 @@ import java.util.UUID;
 
 public interface SellerService {
     SellerDto getById(UUID id);
+    Seller getSellerById(UUID id);
     List<SellerDto> getSellers(Location location);
     List<SellerDto> getAll();
+    List<Seller> getAllSellers();
     SellerDto createSeller(SellerParam param);
 
     void verifyExestedSeller(SellerParam param);

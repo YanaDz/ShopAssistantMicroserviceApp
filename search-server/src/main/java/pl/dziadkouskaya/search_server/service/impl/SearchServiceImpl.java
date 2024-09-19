@@ -14,55 +14,61 @@ import pl.dziadkouskaya.search_server.entity.dto.SearchResult;
 import pl.dziadkouskaya.search_server.entity.enums.SellerElementField;
 import pl.dziadkouskaya.search_server.entity.enums.SellerElementPriority;
 import pl.dziadkouskaya.search_server.entity.enums.SellerElementType;
+import pl.dziadkouskaya.search_server.entity.params.SearchParam;
 import pl.dziadkouskaya.search_server.exception.ResourceNotFoundException;
 import pl.dziadkouskaya.search_server.exception.SellerParsingException;
 import pl.dziadkouskaya.search_server.exception.ShopNotAvailableException;
-import pl.dziadkouskaya.search_server.repository.SellerRepository;
 import pl.dziadkouskaya.search_server.service.SearchService;
+import pl.dziadkouskaya.search_server.service.SellerService;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
+import static java.util.Objects.nonNull;
 import static pl.dziadkouskaya.search_server.entity.enums.SellerElementField.PRODUCT_PRICE;
 import static pl.dziadkouskaya.search_server.entity.enums.SellerElementPriority.ADDITIONAL_ELEMENT_EXCLUDING_MAIN;
 import static pl.dziadkouskaya.search_server.entity.enums.SellerElementPriority.ADDITIONAL_INCLUDED_ELEMENT_FIRST;
 import static pl.dziadkouskaya.search_server.entity.enums.SellerElementPriority.ADDITIONAL_INCLUDED_ELEMENT_SECOND;
 import static pl.dziadkouskaya.search_server.entity.enums.SellerElementPriority.MAIN_ELEMENT;
 import static pl.dziadkouskaya.search_server.entity.enums.SellerElementPriority.ONE_ELEMENT;
+import static pl.dziadkouskaya.search_server.utils.Constants.CUSTOM_TAG_STARTS_WITH;
 import static pl.dziadkouskaya.search_server.utils.Constants.DIV_CONTAINS;
 import static pl.dziadkouskaya.search_server.utils.Constants.DIV_STARTS_WITH;
 import static pl.dziadkouskaya.search_server.utils.Constants.ERROR_PARSING_NO_ONE_OR_MAIN_PRIORITY;
 import static pl.dziadkouskaya.search_server.utils.Constants.ERROR_PARSING_PRICE;
 import static pl.dziadkouskaya.search_server.utils.Constants.ERROR_PARSING_TITLE;
-import static pl.dziadkouskaya.search_server.utils.Constants.ERROR_SELLER_NOT_EXIST;
 import static pl.dziadkouskaya.search_server.utils.Constants.HREF_ATTRIBUTE;
 import static pl.dziadkouskaya.search_server.utils.Constants.LINK;
+import static pl.dziadkouskaya.search_server.utils.Constants.PRODUCT_SEARCH_DEFAULT_WAIT;
 import static pl.dziadkouskaya.search_server.utils.Constants.SEMICOLON;
 import static pl.dziadkouskaya.search_server.utils.Constants.SHOP_CONNECTION_IS_NOT_AVAILABLE;
 import static pl.dziadkouskaya.search_server.utils.Constants.SPACE;
 import static pl.dziadkouskaya.search_server.utils.Validation.checkEmptyString;
+import static pl.dziadkouskaya.search_server.utils.Validation.checkStringWithLetters;
 
 @Service
 @Slf4j
 public class SearchServiceImpl implements SearchService {
-    private final SellerRepository sellerRepository;
+    private final SellerService sellerService;
 
-    public SearchServiceImpl(SellerRepository sellerRepository) {
-        this.sellerRepository = sellerRepository;
+    public SearchServiceImpl(SellerService sellerService) {
+        this.sellerService = sellerService;
     }
+
 
     @Override
     public List<SearchResult> getSellerProducts(String request) {
-        var allSellers = sellerRepository.findAll();
+        var allSellers = sellerService.getAllSellers();
         log.info("Found {} sellers.", allSellers.size());
         var products = allSellers.parallelStream()
             .peek(seller -> log.info("Start getting results from seller {}.", seller.getName()))
             .map(seller -> {
                 try {
                     return getSearchResults(request, seller);
-                } catch (InterruptedException e) {
+                } catch (InterruptedException | IOException e) {
                     throw new ShopNotAvailableException(String.format(SHOP_CONNECTION_IS_NOT_AVAILABLE, seller.getName(),
                         e.getMessage()));
                 }
@@ -73,8 +79,9 @@ public class SearchServiceImpl implements SearchService {
         return products;
     }
 
+
     @Override
-    public List<SearchResult> getSearchResults(String request, Seller seller) throws InterruptedException {
+    public List<SearchResult> getSearchResults(String request, Seller seller, int waitTime) throws InterruptedException {
         WebDriverManager.chromedriver().setup();
         WebDriver webDriver = new FirefoxDriver();
 
@@ -84,7 +91,7 @@ public class SearchServiceImpl implements SearchService {
             webDriver.get(url);
 
             // TODO: check how avoid sleep
-            Thread.sleep(1000);
+            Thread.sleep(waitTime);
 
             String pageSource = webDriver.getPageSource();
 
@@ -95,10 +102,11 @@ public class SearchServiceImpl implements SearchService {
             for (org.jsoup.nodes.Element product : productContainers) {
                 String price = createPrice(seller, product);
 
-                if (checkEmptyString(price)) {
+                String name = createProductTitle(seller, product);
+
+                if (checkEmptyString(price) || checkEmptyString(name)) {
                     continue;
                 }
-                String name = createProductTitle(seller, product);
 
                 String link = product.select(LINK).attr(HREF_ATTRIBUTE);
 
@@ -114,22 +122,32 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
+    public List<SearchResult> getSearchResults(String request, Seller seller) throws IOException, InterruptedException {
+        return getSearchResults(request, seller, PRODUCT_SEARCH_DEFAULT_WAIT);
+    }
+
+    @Override
     public List<SearchResult> getSellerProducts(String request, UUID sellerId) throws IOException, InterruptedException {
         log.info("Start getting results from seller {}.", sellerId);
-        var seller = sellerRepository.findById(sellerId);
-        if (seller.isEmpty()) {
-            throw new ResourceNotFoundException(String.format(ERROR_SELLER_NOT_EXIST, sellerId));
-        }
+        var seller = sellerService.getSellerById(sellerId);
         List<SearchResult> products = new ArrayList<>();
         try {
-            products = getSearchResults(request, seller.get());
+            products = getSearchResults(request, seller);
         } catch (InterruptedException e) {
-            throw new ShopNotAvailableException(String.format(SHOP_CONNECTION_IS_NOT_AVAILABLE, seller.get().getName(),
+            throw new ShopNotAvailableException(String.format(SHOP_CONNECTION_IS_NOT_AVAILABLE, seller.getName(),
                 e.getMessage()));
         }
-        log.info("Received {} products for request {} and seller {}.",products.size(),request, seller.get().getName());
+        log.info("Received {} products for request {} and seller {}.", products.size(), request, seller.getName());
         return products;
-}
+    }
+
+    @Override
+    public List<SearchResult> getSearchResults(SearchParam param) throws IOException, InterruptedException {
+        var seller = sellerService.getSellerById(param.getSellerId());
+        var results = getSearchResults(param.getSearchRequest(), seller, param.getTimeWait());
+        log.info("{} products received fron seller {}.", results.size(), seller.getName());
+        return results;
+    }
 
     private SearchResult buildSearchResult(String seller, String name, String price, String url) {
         return SearchResult.builder()
@@ -159,11 +177,15 @@ public class SearchServiceImpl implements SearchService {
                     title.getElementType().any(SellerElementType.A, SellerElementType.SPAN)
                         ? product.select(title.getElementName()).text()
                         : product.select(String.format(DIV_CONTAINS, title.getElementName())).text();
+                if (!checkStringWithLetters((productTitle))) {
+                    return null;
+                }
                 return ComplexTitlePart.builder()
                     .titlePart(productTitle)
                     .priority(title.getPriority())
                     .build();
             })
+            .filter(Objects::nonNull)
             .toList();
     }
 
@@ -174,17 +196,17 @@ public class SearchServiceImpl implements SearchService {
         }
         var mainPart = crateSeparateTitlePart(parts, MAIN_ELEMENT);
         if (checkEmptyString(mainPart)) {
-            log.error(String.format(ERROR_PARSING_NO_ONE_OR_MAIN_PRIORITY, sellerName));
+            log.error(String.format(ERROR_PARSING_NO_ONE_OR_MAIN_PRIORITY, mainPart, sellerName));
         }
         var middlePart = crateSeparateTitlePart(parts, ADDITIONAL_INCLUDED_ELEMENT_FIRST);
         var endPart = crateSeparateTitlePart(parts, ADDITIONAL_INCLUDED_ELEMENT_SECOND);
-        return mainPart + SEMICOLON + SPACE + middlePart + SPACE + endPart;
+        return mainPart + SPACE + middlePart + SPACE + endPart;
     }
 
     private String crateSeparateTitlePart(List<ComplexTitlePart> parts, SellerElementPriority priority) {
         var titlePart = "";
         var additionalMiddle = parts.stream()
-            .filter(part -> part.getPriority() == priority)
+            .filter(part -> part.getPriority() == priority && !part.getTitlePart().isBlank())
             .findFirst();
         if (additionalMiddle.isPresent()) {
             titlePart = additionalMiddle.get().getTitlePart();

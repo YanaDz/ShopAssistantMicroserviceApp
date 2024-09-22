@@ -27,14 +27,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import static java.util.Objects.nonNull;
 import static pl.dziadkouskaya.search_server.entity.enums.SellerElementField.PRODUCT_PRICE;
 import static pl.dziadkouskaya.search_server.entity.enums.SellerElementPriority.ADDITIONAL_ELEMENT_EXCLUDING_MAIN;
 import static pl.dziadkouskaya.search_server.entity.enums.SellerElementPriority.ADDITIONAL_INCLUDED_ELEMENT_FIRST;
 import static pl.dziadkouskaya.search_server.entity.enums.SellerElementPriority.ADDITIONAL_INCLUDED_ELEMENT_SECOND;
 import static pl.dziadkouskaya.search_server.entity.enums.SellerElementPriority.MAIN_ELEMENT;
 import static pl.dziadkouskaya.search_server.entity.enums.SellerElementPriority.ONE_ELEMENT;
-import static pl.dziadkouskaya.search_server.utils.Constants.CUSTOM_TAG_STARTS_WITH;
 import static pl.dziadkouskaya.search_server.utils.Constants.DIV_CONTAINS;
 import static pl.dziadkouskaya.search_server.utils.Constants.DIV_STARTS_WITH;
 import static pl.dziadkouskaya.search_server.utils.Constants.ERROR_PARSING_NO_ONE_OR_MAIN_PRIORITY;
@@ -43,7 +41,6 @@ import static pl.dziadkouskaya.search_server.utils.Constants.ERROR_PARSING_TITLE
 import static pl.dziadkouskaya.search_server.utils.Constants.HREF_ATTRIBUTE;
 import static pl.dziadkouskaya.search_server.utils.Constants.LINK;
 import static pl.dziadkouskaya.search_server.utils.Constants.PRODUCT_SEARCH_DEFAULT_WAIT;
-import static pl.dziadkouskaya.search_server.utils.Constants.SEMICOLON;
 import static pl.dziadkouskaya.search_server.utils.Constants.SHOP_CONNECTION_IS_NOT_AVAILABLE;
 import static pl.dziadkouskaya.search_server.utils.Constants.SPACE;
 import static pl.dziadkouskaya.search_server.utils.Validation.checkEmptyString;

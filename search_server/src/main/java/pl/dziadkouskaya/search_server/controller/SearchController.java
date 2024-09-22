@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import pl.dziadkouskaya.search_server.entity.dto.EqualProductNames;
 import pl.dziadkouskaya.search_server.entity.dto.SearchResult;
 import pl.dziadkouskaya.search_server.entity.params.SearchParam;
-import pl.dziadkouskaya.search_server.entity.params.SellerParam;
+import pl.dziadkouskaya.search_server.facade.SearchFacade;
 import pl.dziadkouskaya.search_server.service.SearchService;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,9 +26,11 @@ public class SearchController {
     @Autowired
     private SearchService searchService;
 
+    @Autowired
+    private SearchFacade searchFacade;
 
     @GetMapping
-    public List<SearchResult> getSearchResults(@RequestParam String searchRequest) throws IOException, InterruptedException {
+    public List<List<SearchResult>> getSearchResults(@RequestParam String searchRequest) throws IOException, InterruptedException {
         return searchService.getSellerProducts(searchRequest);
     }
 
@@ -36,6 +38,11 @@ public class SearchController {
     @PostMapping(value = "/seller", produces = "application/json")
     public List<SearchResult> getSearchResults(@RequestBody SearchParam param) throws IOException, InterruptedException {
         return searchService.getSearchResults(param);
+    }
+
+    @GetMapping(value = "/data", produces = "application/json")
+    public List<EqualProductNames> getComparedResults(@RequestParam String param) throws IOException, InterruptedException {
+        return searchFacade.findResults(param);
     }
 
 }

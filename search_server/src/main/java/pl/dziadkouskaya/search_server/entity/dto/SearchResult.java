@@ -15,5 +15,6 @@ public class SearchResult {
     private String name;
     private String url;
     private String price;
+    private boolean isCompared = false;
 
 }

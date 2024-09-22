@@ -30,5 +30,6 @@ public class Constants {
 
     // default values
     public static final int PRODUCT_SEARCH_DEFAULT_WAIT = 10000;
+    public static final int DISTANCE_THRESHOLD = 5;
 
 }

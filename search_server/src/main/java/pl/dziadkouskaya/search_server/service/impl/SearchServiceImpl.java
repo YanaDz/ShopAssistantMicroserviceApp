@@ -57,7 +57,7 @@ public class SearchServiceImpl implements SearchService {
 
 
     @Override
-    public List<SearchResult> getSellerProducts(String request) {
+    public List<List<SearchResult>> getSellerProducts(String request) {
         var allSellers = sellerService.getAllSellers();
         log.info("Found {} sellers.", allSellers.size());
         var products = allSellers.parallelStream()
@@ -70,7 +70,7 @@ public class SearchServiceImpl implements SearchService {
                         e.getMessage()));
                 }
             })
-            .flatMap(List::stream)
+//            .flatMap(List::stream)
             .toList();
         log.info("Received {} products for request {}.", products.size(), request);
         return products;

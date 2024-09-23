@@ -26,6 +26,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@Builder
 public class Seller extends AuditableEntity {
     @Id
     @GeneratedValue(generator = "UUID")

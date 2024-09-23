@@ -27,6 +27,10 @@ public class SearchFacadeImpl implements SearchFacade {
         var initialData = searchService.getSellerProducts(param);
         var comparedData = comparisonService.findEqualProducts(initialData);
         log.info("ComparedData list is {}.", comparedData.size());
+        var equalsProducts = comparedData.stream()
+            .filter(product -> product.getDescriptions().size() > 1)
+            .count();
+        log.info("The number of entities have more than one description is {}.", equalsProducts);
         return comparedData;
     }
 }

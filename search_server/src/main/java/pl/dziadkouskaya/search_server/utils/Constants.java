@@ -11,8 +11,9 @@ public class Constants {
     public static final String FIRM_NAME_NOT_EMPTY = "Firm name can't be empty";
     public static final String SHOP_CONNECTION_IS_NOT_AVAILABLE = "Shop %s is not available now, exception: {}.";
     public static final String ERROR_PARSING_PRICE = "The product's prices are not found for the seller %s.";
-    public static final String ERROR_PARSING_TITLE ="The product's titles are not found for the seller %s.";
-    public static final String ERROR_PARSING_NO_ONE_OR_MAIN_PRIORITY ="The titles %s for the seller %s contains no ONE or MAIN priority title.";
+    public static final String ERROR_PARSING_TITLE = "The product's titles are not found for the seller %s.";
+    public static final String ERROR_PARSING_NO_ONE_OR_MAIN_PRIORITY = "The titles %s for the seller %s contains no ONE or MAIN priority " +
+        "title.";
     public static final String ERROR_SELLER_EXISTED = "Seller with name %s or searchUrl %s existed";
     public static final String ERROR_SELLER_NOT_EXIST = "Seller with id %s doesn't exist";
 
@@ -30,6 +31,8 @@ public class Constants {
 
     // default values
     public static final int PRODUCT_SEARCH_DEFAULT_WAIT = 10000;
-    public static final int DISTANCE_THRESHOLD = 5;
+    public static final int DEFAULT_INDEX_VALUE = 0;
+    public static final int LEVENSHTEIN_DISTANCE_THRESHOLD = 30;
+    public static final double JARO_WINKLER_SCORE_LIMIT = 0.67;
 
 }

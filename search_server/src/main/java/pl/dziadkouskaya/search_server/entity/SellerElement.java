@@ -45,7 +45,7 @@ public class SellerElement extends AuditableEntity {
     @Column(name = "seller_element_field")
     private SellerElementField sellerElementField;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "seller_id")
     private Seller seller;
 }

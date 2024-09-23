@@ -4,10 +4,10 @@ import org.apache.commons.text.similarity.LevenshteinDistance;
 
 import static java.util.Objects.isNull;
 
-public class Levenshtein {
+public class LevenshteinStringAnalizator {
     private static LevenshteinDistance levenshtein;
 
-    private Levenshtein() {
+    private LevenshteinStringAnalizator() {
 
     }
 

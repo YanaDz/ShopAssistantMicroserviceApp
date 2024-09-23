@@ -192,9 +192,6 @@ public class SearchServiceImpl implements SearchService {
             return onePartTitle;
         }
         var mainPart = crateSeparateTitlePart(parts, MAIN_ELEMENT);
-        if (checkEmptyString(mainPart)) {
-            log.error(String.format(ERROR_PARSING_NO_ONE_OR_MAIN_PRIORITY, mainPart, sellerName));
-        }
         var middlePart = crateSeparateTitlePart(parts, ADDITIONAL_INCLUDED_ELEMENT_FIRST);
         var endPart = crateSeparateTitlePart(parts, ADDITIONAL_INCLUDED_ELEMENT_SECOND);
         return mainPart + SPACE + middlePart + SPACE + endPart;

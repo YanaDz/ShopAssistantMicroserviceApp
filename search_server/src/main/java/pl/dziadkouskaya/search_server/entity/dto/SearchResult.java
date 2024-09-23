@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
-import pl.dziadkouskaya.search_server.entity.Seller;
 
 @Data
 @Jacksonized

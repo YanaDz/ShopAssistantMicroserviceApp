@@ -28,4 +28,7 @@ public class Constants {
     //default values
     public static Location DEFAULT_LOCATION = Location.EN;
 
+    //ActiveMQ queues
+    public static final String ACTIVEMQ_QUEUE_SELLER_CREATED = "seller.created.queue";
+
 }

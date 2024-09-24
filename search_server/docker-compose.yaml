@@ -6,13 +6,27 @@ services:
     container_name: search-postgres
     environment:
       POSTGRES_DB: search_service
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
     ports:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
+
+  activemq:
+    image: rmohr/activemq:latest
+    container_name: activemq
+    ports:
+      - "61616:61616"  # ActiveMQ broker port for JMS clients
+      - "8161:8161"    # Web console port
+    environment:
+      ACTIVEMQ_ADMIN_LOGIN: ${ACTIVE_MQ_USER}
+      ACTIVEMQ_ADMIN_PASSWORD: ${ACTIVE_MQ_PASSWORD}
+      ACTIVEMQ_MIN_MEMORY: 512
+      ACTIVEMQ_MAX_MEMORY: 1024
+    volumes:
+      - activemq-data:/var/activemq/data
 
 #  product-service-app:
 #    image: search-service-app-image
@@ -31,6 +45,7 @@ services:
 
 volumes:
   postgres_data:
+  activemq-data:
 
 networks:
   spring-boot-postgres-network:

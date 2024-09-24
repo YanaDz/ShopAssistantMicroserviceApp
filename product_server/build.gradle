@@ -47,7 +47,12 @@ dependencies {
     testImplementation "org.testcontainers:junit-jupiter:1.20.0"
     implementation group: 'jakarta.validation', name: 'jakarta.validation-api', version: '3.1.0'
 
-
+    // ActiveMQ
+    implementation 'org.springframework.boot:spring-boot-starter-activemq'
+    implementation 'org.apache.activemq:activemq-client'
+    implementation 'org.springframework:spring-jms'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.apache.activemq:activemq-broker'
 
     //	implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.5.5.Final'
     //	implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter'

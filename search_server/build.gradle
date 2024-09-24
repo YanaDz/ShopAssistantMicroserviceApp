@@ -48,6 +48,12 @@ dependencies {
 	implementation 'org.seleniumhq.selenium:selenium-java:4.5.0'
 	// WebDriverManager to automatically manage driver binaries
 	implementation 'io.github.bonigarcia:webdrivermanager:5.3.2'
+	// ActiveMQ
+	implementation 'org.springframework.boot:spring-boot-starter-activemq'
+	implementation 'org.apache.activemq:activemq-client'
+	implementation 'org.springframework:spring-jms'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.apache.activemq:activemq-broker'
 }
 
 tasks.named('test') {

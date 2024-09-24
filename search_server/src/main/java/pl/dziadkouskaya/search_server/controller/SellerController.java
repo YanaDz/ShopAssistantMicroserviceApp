@@ -2,6 +2,7 @@ package pl.dziadkouskaya.search_server.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.*;
 import pl.dziadkouskaya.search_server.entity.Seller;
 import pl.dziadkouskaya.search_server.entity.dto.SellerDto;
@@ -12,6 +13,8 @@ import pl.dziadkouskaya.search_server.service.SellerService;
 import java.util.List;
 import java.util.UUID;
 
+import static pl.dziadkouskaya.search_server.utils.Constants.ACTIVEMQ_QUEUE_SELLER_CREATED;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = SellerController.PATH)
@@ -21,9 +24,14 @@ public class SellerController {
     @Autowired
     private final SellerService sellerService;
 
+    @Autowired
+    private   final JmsTemplate jmsTemplate;
+
     @PostMapping(consumes = "application/json", produces = "application/json")
     public SellerDto createSeller(@RequestBody SellerParam sellerParam) {
-        return sellerService.createSeller(sellerParam);
+        var seller = sellerService.createSeller(sellerParam);
+        jmsTemplate.convertAndSend(ACTIVEMQ_QUEUE_SELLER_CREATED, seller);
+        return seller;
     }
 
     @GetMapping(produces = "application/json")

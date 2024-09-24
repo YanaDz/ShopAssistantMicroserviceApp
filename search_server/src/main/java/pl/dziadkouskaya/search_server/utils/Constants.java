@@ -35,4 +35,7 @@ public class Constants {
     public static final int LEVENSHTEIN_DISTANCE_THRESHOLD = 30;
     public static final double JARO_WINKLER_SCORE_LIMIT = 0.67;
 
+    //ActiveMQ queues
+    public static final String ACTIVEMQ_QUEUE_SELLER_CREATED = "seller.created.queue";
+
 }

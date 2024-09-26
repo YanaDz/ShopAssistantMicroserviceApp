@@ -13,13 +13,15 @@ import pl.dziadkouskaya.search_server.entity.enums.SellerElementField;
 import pl.dziadkouskaya.search_server.entity.enums.SellerElementPriority;
 import pl.dziadkouskaya.search_server.entity.enums.SellerElementType;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 @Data
 @Jacksonized
 @SuperBuilder
 @EqualsAndHashCode(callSuper = false)
-public class SellerElementDto {
+public class SellerElementDto implements Serializable {
+    private static final long serialVersionUID = 1L;
     private UUID id;
     private SellerElementType elementType;
     private String elementName;

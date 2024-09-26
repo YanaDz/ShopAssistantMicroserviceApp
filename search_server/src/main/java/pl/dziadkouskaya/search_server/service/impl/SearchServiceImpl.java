@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static pl.dziadkouskaya.search_server.entity.enums.SellerElementField.PRODUCT_PRICE;
 import static pl.dziadkouskaya.search_server.entity.enums.SellerElementPriority.ADDITIONAL_ELEMENT_EXCLUDING_MAIN;
@@ -35,7 +36,6 @@ import static pl.dziadkouskaya.search_server.entity.enums.SellerElementPriority.
 import static pl.dziadkouskaya.search_server.entity.enums.SellerElementPriority.ONE_ELEMENT;
 import static pl.dziadkouskaya.search_server.utils.Constants.DIV_CONTAINS;
 import static pl.dziadkouskaya.search_server.utils.Constants.DIV_STARTS_WITH;
-import static pl.dziadkouskaya.search_server.utils.Constants.ERROR_PARSING_NO_ONE_OR_MAIN_PRIORITY;
 import static pl.dziadkouskaya.search_server.utils.Constants.ERROR_PARSING_PRICE;
 import static pl.dziadkouskaya.search_server.utils.Constants.ERROR_PARSING_TITLE;
 import static pl.dziadkouskaya.search_server.utils.Constants.HREF_ATTRIBUTE;
@@ -64,7 +64,7 @@ public class SearchServiceImpl implements SearchService {
             .peek(seller -> log.info("Start getting results from seller {}.", seller.getName()))
             .map(seller -> {
                 try {
-                    return getSearchResults(request, seller);
+                    return getSearchResultsFromSellers(request, seller);
                 } catch (InterruptedException | IOException e) {
                     throw new ShopNotAvailableException(String.format(SHOP_CONNECTION_IS_NOT_AVAILABLE, seller.getName(),
                         e.getMessage()));
@@ -78,7 +78,7 @@ public class SearchServiceImpl implements SearchService {
 
 
     @Override
-    public List<SearchResult> getSearchResults(String request, Seller seller, int waitTime) throws InterruptedException {
+    public List<SearchResult> getSearchResultsFromSellers(String request, Seller seller, int waitTime) throws InterruptedException {
         WebDriverManager.chromedriver().setup();
         WebDriver webDriver = new FirefoxDriver();
 
@@ -119,8 +119,8 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public List<SearchResult> getSearchResults(String request, Seller seller) throws IOException, InterruptedException {
-        return getSearchResults(request, seller, PRODUCT_SEARCH_DEFAULT_WAIT);
+    public List<SearchResult> getSearchResultsFromSellers(String request, Seller seller) throws IOException, InterruptedException {
+        return getSearchResultsFromSellers(request, seller, PRODUCT_SEARCH_DEFAULT_WAIT);
     }
 
     @Override
@@ -129,7 +129,7 @@ public class SearchServiceImpl implements SearchService {
         var seller = sellerService.getSellerById(sellerId);
         List<SearchResult> products = new ArrayList<>();
         try {
-            products = getSearchResults(request, seller);
+            products = getSearchResultsFromSellers(request, seller);
         } catch (InterruptedException e) {
             throw new ShopNotAvailableException(String.format(SHOP_CONNECTION_IS_NOT_AVAILABLE, seller.getName(),
                 e.getMessage()));
@@ -139,11 +139,21 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public List<SearchResult> getSearchResults(SearchParam param) throws IOException, InterruptedException {
-        var seller = sellerService.getSellerById(param.getSellerId());
-        var results = getSearchResults(param.getSearchRequest(), seller, param.getTimeWait());
-        log.info("{} products received fron seller {}.", results.size(), seller.getName());
-        return results;
+    public List<List<SearchResult>> getSearchResultsFromSellers(SearchParam param) throws IOException, InterruptedException {
+        var sellers = param.getSellerId().stream()
+            .map(sellerService::getSellerById)
+            .toList();
+        return sellers.stream()
+            .peek(seller -> log.info("Start receiving info from seller {}.", seller.getName()))
+            .map(seller -> {
+                try {
+                    return getSearchResultsFromSellers(param.getSearchRequest(), seller, param.getTimeWait());
+                } catch (InterruptedException e) {
+                    throw new SellerParsingException("Problems with parsing data from seller {}.", seller);
+                }
+            })
+            .peek(result -> log.info("Received {} products", result.size()))
+        .collect(Collectors.toList());
     }
 
     private SearchResult buildSearchResult(String seller, String name, String price, String url) {

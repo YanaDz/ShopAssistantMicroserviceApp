@@ -36,8 +36,8 @@ public class SearchController {
 
 
     @PostMapping(value = "/seller", produces = "application/json")
-    public List<SearchResult> getSearchResults(@RequestBody SearchParam param) throws IOException, InterruptedException {
-        return searchService.getSearchResults(param);
+    public List<EqualProductNames> getSearchResults(@RequestBody SearchParam param) throws IOException, InterruptedException {
+        return searchFacade.findProductsFromSellers(param);
     }
 
     @GetMapping(value = "/data", produces = "application/json")

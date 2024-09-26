@@ -1,5 +1,7 @@
 package pl.dziadkouskaya.search_server.exception;
 
+import pl.dziadkouskaya.search_server.entity.Seller;
+
 public class SellerParsingException extends ApplicationException {
     public SellerParsingException() {
     }
@@ -8,4 +10,7 @@ public class SellerParsingException extends ApplicationException {
         super(message);
     }
 
+    public SellerParsingException(String s, Seller seller) {
+
+    }
 }

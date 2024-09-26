@@ -1,10 +1,10 @@
 package pl.dziadkouskaya.search_server.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import pl.dziadkouskaya.search_server.entity.Seller;
 import pl.dziadkouskaya.search_server.entity.dto.SellerDto;
-import pl.dziadkouskaya.search_server.entity.dto.SellerElementDto;
 import pl.dziadkouskaya.search_server.entity.enums.Location;
 import pl.dziadkouskaya.search_server.entity.params.SellerParam;
 import pl.dziadkouskaya.search_server.exception.ResourceExistedException;
@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static pl.dziadkouskaya.search_server.utils.Constants.ACTIVEMQ_QUEUE_SELLER_CREATED;
 import static pl.dziadkouskaya.search_server.utils.Constants.ERROR_SELLER_EXISTED;
 import static pl.dziadkouskaya.search_server.utils.Constants.RESOURCE_NOT_FOUND;
 
@@ -27,12 +28,14 @@ public class SellerServiceImpl implements SellerService {
 
     private final SellerRepository repository;
     private final SellerMapper sellerMapper;
+    private final JmsTemplate jmsTemplate;
 
     private final SellerElementRepository elementRepository;
 
-    public SellerServiceImpl(SellerRepository repository, SellerMapper sellerMapper, SellerElementRepository elementRepository) {
+    public SellerServiceImpl(SellerRepository repository, SellerMapper sellerMapper, JmsTemplate jmsTemplate, SellerElementRepository elementRepository) {
         this.repository = repository;
         this.sellerMapper = sellerMapper;
+        this.jmsTemplate = jmsTemplate;
         this.elementRepository = elementRepository;
     }
 
@@ -89,6 +92,8 @@ public class SellerServiceImpl implements SellerService {
             .forEach(price -> price.setSeller(seller));
         var savedSeller = repository.save(seller);
         log.info("Seller with id {} and name {} was created.", savedSeller.getId(), savedSeller.getName());
+        jmsTemplate.convertAndSend(ACTIVEMQ_QUEUE_SELLER_CREATED, seller);
+        log.info("Info about the seller with id {} was sent to the product_server.", seller.getId());
         return sellerMapper.toDto(savedSeller);
     }
 

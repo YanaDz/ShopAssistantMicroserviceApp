@@ -6,6 +6,7 @@ import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 import pl.dziadkouskaya.search_server.entity.enums.Location;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,7 +14,8 @@ import java.util.UUID;
 @Jacksonized
 @SuperBuilder
 @EqualsAndHashCode(callSuper = false)
-public class SellerDto {
+public class SellerDto implements Serializable {
+    private static final long serialVersionUID = 1L;
     private UUID id;
     private String name;
     private Location location;

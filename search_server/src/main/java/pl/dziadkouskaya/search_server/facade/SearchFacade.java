@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface SearchFacade {
     List<EqualProductNames> findResults(String param) throws IOException, InterruptedException;
+    List<EqualProductNames> findProductsFromSellers(SearchParam param) throws IOException, InterruptedException;
 }

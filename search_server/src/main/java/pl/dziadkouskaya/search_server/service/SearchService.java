@@ -11,8 +11,8 @@ import java.util.UUID;
 
 public interface SearchService {
     List<List<SearchResult>> getSellerProducts(String request);
-    List<SearchResult> getSearchResults(String request, Seller sellerId, int waitTime) throws IOException, InterruptedException;
-    List<SearchResult> getSearchResults(String request, Seller seller) throws IOException, InterruptedException;
+    List<SearchResult> getSearchResultsFromSellers(String request, Seller sellerId, int waitTime) throws IOException, InterruptedException;
+    List<SearchResult> getSearchResultsFromSellers(String request, Seller seller) throws IOException, InterruptedException;
     List<SearchResult> getSellerProducts(String request, UUID sellerId) throws IOException, InterruptedException;
-    List<SearchResult> getSearchResults(SearchParam param) throws IOException, InterruptedException;
+    List<List<SearchResult>> getSearchResultsFromSellers(SearchParam param) throws IOException, InterruptedException;
 }

@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -13,7 +14,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 public class SearchParam {
     private String searchRequest;
-    private UUID sellerId;
+    private List<UUID> sellerId;
     private int timeWait;
 
 }

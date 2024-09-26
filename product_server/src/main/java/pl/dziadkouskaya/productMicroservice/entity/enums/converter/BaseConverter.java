@@ -1,8 +1,8 @@
-package pl.dziadkouskaya.graphql.entity.enums.converter;
+package pl.dziadkouskaya.productMicroservice.entity.enums.converter;
 
 import jakarta.persistence.AttributeConverter;
 import org.hibernate.query.sqm.sql.ConversionException;
-import pl.dziadkouskaya.graphql.entity.enums.BaseEnum;
+import pl.dziadkouskaya.productMicroservice.entity.enums.BaseEnum;
 
 import java.util.Arrays;
 import java.util.Map;

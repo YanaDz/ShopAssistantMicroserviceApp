@@ -1,6 +1,6 @@
-package pl.dziadkouskaya.graphql.utils;
+package pl.dziadkouskaya.productMicroservice.utils;
 
-import static pl.dziadkouskaya.graphql.utils.Constants.PERCENT;
+import static pl.dziadkouskaya.productMicroservice.utils.Constants.PERCENT;
 
 public class StringOperations {
     public static String createSearchingRequest(String string) {

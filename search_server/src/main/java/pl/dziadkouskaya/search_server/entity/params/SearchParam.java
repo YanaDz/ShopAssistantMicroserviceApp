@@ -13,6 +13,7 @@ import java.util.UUID;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = false)
 public class SearchParam {
+    @
     private String searchRequest;
     private List<UUID> sellerId;
     private int timeWait;

@@ -1,4 +1,4 @@
-package pl.dziadkouskaya.graphql.entity.enums;
+package pl.dziadkouskaya.productMicroservice.entity.enums;
 
 import lombok.Getter;
 

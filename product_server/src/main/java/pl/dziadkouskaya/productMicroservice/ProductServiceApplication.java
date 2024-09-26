@@ -1,4 +1,4 @@
-package pl.dziadkouskaya.graphql;
+package pl.dziadkouskaya.productMicroservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

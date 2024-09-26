@@ -71,8 +71,6 @@ public class SearchServiceImpl implements SearchService {
         log.info("Received {} products for request {}.", products.size(), request);
         return products;
     }
-
-
     @Override
     public List<SearchResult> getSearchResultsFromSellers(String request, Seller seller, int waitTime) throws InterruptedException {
         WebDriverManager.chromedriver().setup();

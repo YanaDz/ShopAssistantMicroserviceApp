@@ -1,4 +1,4 @@
-package pl.dziadkouskaya.graphql.entity.dto;
+package pl.dziadkouskaya.productMicroservice.entity.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -8,8 +8,8 @@ import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 
 
-import static pl.dziadkouskaya.graphql.utils.Constants.FIRM_NAME_NOT_EMPTY;
-import static pl.dziadkouskaya.graphql.utils.Constants.FIRM_NAME_NOT_NULL;
+import static pl.dziadkouskaya.productMicroservice.utils.Constants.FIRM_NAME_NOT_EMPTY;
+import static pl.dziadkouskaya.productMicroservice.utils.Constants.FIRM_NAME_NOT_NULL;
 
 @Data
 @Jacksonized

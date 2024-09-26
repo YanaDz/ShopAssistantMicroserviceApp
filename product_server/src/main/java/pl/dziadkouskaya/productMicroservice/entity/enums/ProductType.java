@@ -1,7 +1,7 @@
-package pl.dziadkouskaya.graphql.entity.enums;
+package pl.dziadkouskaya.productMicroservice.entity.enums;
 
 import lombok.Getter;
-import pl.dziadkouskaya.graphql.entity.enums.converter.BaseConverter;
+import pl.dziadkouskaya.productMicroservice.entity.enums.converter.BaseConverter;
 
 import java.util.HashMap;
 import java.util.Map;

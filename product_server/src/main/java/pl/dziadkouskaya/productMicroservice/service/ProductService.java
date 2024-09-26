@@ -1,9 +1,9 @@
-package pl.dziadkouskaya.graphql.service;
+package pl.dziadkouskaya.productMicroservice.service;
 
 
-import pl.dziadkouskaya.graphql.entity.dto.ProductDto;
-import pl.dziadkouskaya.graphql.entity.filters.ProductFilter;
-import pl.dziadkouskaya.graphql.entity.param.ProductParams;
+import pl.dziadkouskaya.productMicroservice.entity.dto.ProductDto;
+import pl.dziadkouskaya.productMicroservice.entity.filters.ProductFilter;
+import pl.dziadkouskaya.productMicroservice.entity.param.ProductParams;
 
 import java.util.List;
 import java.util.UUID;

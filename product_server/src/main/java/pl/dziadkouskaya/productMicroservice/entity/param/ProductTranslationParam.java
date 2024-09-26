@@ -1,12 +1,12 @@
-package pl.dziadkouskaya.graphql.entity.param;
+package pl.dziadkouskaya.productMicroservice.entity.param;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
-import pl.dziadkouskaya.graphql.entity.enums.Location;
-import pl.dziadkouskaya.graphql.entity.enums.TranslationType;
+import pl.dziadkouskaya.productMicroservice.entity.enums.Location;
+import pl.dziadkouskaya.productMicroservice.entity.enums.TranslationType;
 
 import java.util.Map;
 import java.util.UUID;

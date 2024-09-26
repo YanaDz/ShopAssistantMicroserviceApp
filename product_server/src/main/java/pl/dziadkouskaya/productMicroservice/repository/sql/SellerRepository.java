@@ -1,8 +1,8 @@
-package pl.dziadkouskaya.graphql.repository.sql;
+package pl.dziadkouskaya.productMicroservice.repository.sql;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import pl.dziadkouskaya.graphql.entity.Seller;
+import pl.dziadkouskaya.productMicroservice.entity.Seller;
 
 import java.util.UUID;
 

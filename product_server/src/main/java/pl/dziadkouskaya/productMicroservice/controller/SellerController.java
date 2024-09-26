@@ -1,10 +1,10 @@
-package pl.dziadkouskaya.graphql.controller;
+package pl.dziadkouskaya.productMicroservice.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import pl.dziadkouskaya.graphql.entity.dto.SellerDto;
-import pl.dziadkouskaya.graphql.entity.dto.SellerParam;
-import pl.dziadkouskaya.graphql.service.SellerService;
+import pl.dziadkouskaya.productMicroservice.entity.dto.SellerDto;
+import pl.dziadkouskaya.productMicroservice.entity.dto.SellerParam;
+import pl.dziadkouskaya.productMicroservice.service.SellerService;
 
 import java.util.List;
 import java.util.UUID;

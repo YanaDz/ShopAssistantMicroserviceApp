@@ -1,23 +1,23 @@
-package pl.dziadkouskaya.graphql.service.impl;
+package pl.dziadkouskaya.productMicroservice.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pl.dziadkouskaya.graphql.entity.ProductTranslation;
-import pl.dziadkouskaya.graphql.entity.dto.ProductTranslationDto;
-import pl.dziadkouskaya.graphql.entity.param.ProductTranslationParam;
-import pl.dziadkouskaya.graphql.exception.ResourceExistedException;
-import pl.dziadkouskaya.graphql.exception.ResourceNotFoundException;
-import pl.dziadkouskaya.graphql.mapper.ProductTranslationMapper;
-import pl.dziadkouskaya.graphql.repository.sql.ProductTranslationRepository;
-import pl.dziadkouskaya.graphql.service.ProductTranslationService;
+import pl.dziadkouskaya.productMicroservice.entity.ProductTranslation;
+import pl.dziadkouskaya.productMicroservice.entity.dto.ProductTranslationDto;
+import pl.dziadkouskaya.productMicroservice.entity.param.ProductTranslationParam;
+import pl.dziadkouskaya.productMicroservice.exception.ResourceExistedException;
+import pl.dziadkouskaya.productMicroservice.exception.ResourceNotFoundException;
+import pl.dziadkouskaya.productMicroservice.mapper.ProductTranslationMapper;
+import pl.dziadkouskaya.productMicroservice.repository.sql.ProductTranslationRepository;
+import pl.dziadkouskaya.productMicroservice.service.ProductTranslationService;
 
 import java.util.List;
 import java.util.UUID;
 
 import static java.util.Objects.isNull;
 import static org.springframework.web.servlet.view.XmlViewResolver.DEFAULT_LOCATION;
-import static pl.dziadkouskaya.graphql.entity.enums.TranslationType.MAIN;
-import static pl.dziadkouskaya.graphql.entity.enums.TranslationType.NOT_DETERMINED;
+import static pl.dziadkouskaya.productMicroservice.entity.enums.TranslationType.MAIN;
+import static pl.dziadkouskaya.productMicroservice.entity.enums.TranslationType.NOT_DETERMINED;
 
 @Service
 @Slf4j

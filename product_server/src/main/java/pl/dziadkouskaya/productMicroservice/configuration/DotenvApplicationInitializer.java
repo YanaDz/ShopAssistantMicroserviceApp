@@ -1,4 +1,4 @@
-package pl.dziadkouskaya.graphql.configuration;
+package pl.dziadkouskaya.productMicroservice.configuration;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.boot.SpringApplication;

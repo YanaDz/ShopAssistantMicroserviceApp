@@ -1,4 +1,4 @@
-package pl.dziadkouskaya.graphql.entity.filters;
+package pl.dziadkouskaya.productMicroservice.entity.filters;
 
 import lombok.Data;
 

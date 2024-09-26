@@ -1,7 +1,7 @@
-package pl.dziadkouskaya.graphql.repository.sql;
+package pl.dziadkouskaya.productMicroservice.repository.sql;
 
-import pl.dziadkouskaya.graphql.entity.Product;
-import pl.dziadkouskaya.graphql.entity.enums.ProductType;
+import pl.dziadkouskaya.productMicroservice.entity.Product;
+import pl.dziadkouskaya.productMicroservice.entity.enums.ProductType;
 
 import java.util.List;
 

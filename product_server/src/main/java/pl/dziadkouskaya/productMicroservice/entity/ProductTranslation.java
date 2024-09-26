@@ -1,4 +1,4 @@
-package pl.dziadkouskaya.graphql.entity;
+package pl.dziadkouskaya.productMicroservice.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -6,8 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import pl.dziadkouskaya.graphql.entity.enums.Location;
-import pl.dziadkouskaya.graphql.entity.enums.TranslationType;
+import pl.dziadkouskaya.productMicroservice.entity.enums.Location;
+import pl.dziadkouskaya.productMicroservice.entity.enums.TranslationType;
 
 import java.util.List;
 import java.util.UUID;

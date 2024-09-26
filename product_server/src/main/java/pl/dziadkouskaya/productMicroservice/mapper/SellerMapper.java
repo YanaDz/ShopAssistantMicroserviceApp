@@ -1,11 +1,11 @@
-package pl.dziadkouskaya.graphql.mapper;
+package pl.dziadkouskaya.productMicroservice.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
-import pl.dziadkouskaya.graphql.entity.Seller;
-import pl.dziadkouskaya.graphql.entity.dto.SellerDto;
-import pl.dziadkouskaya.graphql.entity.dto.SellerParam;
+import pl.dziadkouskaya.productMicroservice.entity.Seller;
+import pl.dziadkouskaya.productMicroservice.entity.dto.SellerDto;
+import pl.dziadkouskaya.productMicroservice.entity.dto.SellerParam;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface SellerMapper {

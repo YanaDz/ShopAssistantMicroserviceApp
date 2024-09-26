@@ -1,11 +1,11 @@
-package pl.dziadkouskaya.graphql.service.impl;
+package pl.dziadkouskaya.productMicroservice.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pl.dziadkouskaya.graphql.entity.Purchase;
-import pl.dziadkouskaya.graphql.entity.filters.PurchaseFilter;
-import pl.dziadkouskaya.graphql.repository.sql.PurchaseRepository;
-import pl.dziadkouskaya.graphql.service.PurchaseService;
+import pl.dziadkouskaya.productMicroservice.entity.Purchase;
+import pl.dziadkouskaya.productMicroservice.entity.filters.PurchaseFilter;
+import pl.dziadkouskaya.productMicroservice.repository.sql.PurchaseRepository;
+import pl.dziadkouskaya.productMicroservice.service.PurchaseService;
 
 import java.util.List;
 import java.util.Optional;

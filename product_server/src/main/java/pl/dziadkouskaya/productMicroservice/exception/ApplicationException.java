@@ -1,4 +1,4 @@
-package pl.dziadkouskaya.graphql.exception;
+package pl.dziadkouskaya.productMicroservice.exception;
 
 public class ApplicationException extends RuntimeException {
 

@@ -1,4 +1,4 @@
-package pl.dziadkouskaya.graphql.exception;
+package pl.dziadkouskaya.productMicroservice.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -18,7 +18,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.*;
-import static pl.dziadkouskaya.graphql.utils.Constants.*;
+import static pl.dziadkouskaya.productMicroservice.utils.Constants.*;
 
 @Slf4j
 @ControllerAdvice

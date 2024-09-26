@@ -1,6 +1,6 @@
-package pl.dziadkouskaya.graphql.utils;
+package pl.dziadkouskaya.productMicroservice.utils;
 
-import pl.dziadkouskaya.graphql.entity.enums.Location;
+import pl.dziadkouskaya.productMicroservice.entity.enums.Location;
 
 public class Constants {
     public static final String PERCENT = "%";

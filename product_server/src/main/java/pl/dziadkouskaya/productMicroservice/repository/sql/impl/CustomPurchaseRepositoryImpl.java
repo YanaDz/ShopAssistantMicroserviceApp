@@ -1,19 +1,19 @@
-package pl.dziadkouskaya.graphql.repository.sql.impl;
+package pl.dziadkouskaya.productMicroservice.repository.sql.impl;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.*;
-import pl.dziadkouskaya.graphql.entity.Product;
-import pl.dziadkouskaya.graphql.entity.Purchase;
-import pl.dziadkouskaya.graphql.entity.filters.PurchaseFilter;
-import pl.dziadkouskaya.graphql.entity.Seller;
-import pl.dziadkouskaya.graphql.repository.sql.CustomPurchaseRepository;
+import pl.dziadkouskaya.productMicroservice.entity.Product;
+import pl.dziadkouskaya.productMicroservice.entity.Purchase;
+import pl.dziadkouskaya.productMicroservice.entity.filters.PurchaseFilter;
+import pl.dziadkouskaya.productMicroservice.entity.Seller;
+import pl.dziadkouskaya.productMicroservice.repository.sql.CustomPurchaseRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Objects.nonNull;
-import static pl.dziadkouskaya.graphql.utils.StringOperations.createSearchingRequest;
+import static pl.dziadkouskaya.productMicroservice.utils.StringOperations.createSearchingRequest;
 
 public class CustomPurchaseRepositoryImpl implements CustomPurchaseRepository {
 

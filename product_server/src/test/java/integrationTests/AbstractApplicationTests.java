@@ -10,9 +10,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import pl.dziadkouskaya.graphql.ProductServiceApplication;
-import pl.dziadkouskaya.graphql.entity.dto.FirmParams;
-import pl.dziadkouskaya.graphql.repository.sql.FirmRepository;
+import pl.dziadkouskaya.productMicroservice.ProductServiceApplication;
+import pl.dziadkouskaya.productMicroservice.entity.dto.FirmParams;
+import pl.dziadkouskaya.productMicroservice.repository.sql.FirmRepository;
 
 @SpringBootTest(classes = ProductServiceApplication.class)
 @Testcontainers

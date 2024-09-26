@@ -1,13 +1,13 @@
-package pl.dziadkouskaya.graphql.controller;
+package pl.dziadkouskaya.productMicroservice.controller;
 
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import pl.dziadkouskaya.graphql.entity.dto.FirmDto;
-import pl.dziadkouskaya.graphql.entity.dto.FirmParams;
-import pl.dziadkouskaya.graphql.service.FirmService;
+import pl.dziadkouskaya.productMicroservice.entity.dto.FirmDto;
+import pl.dziadkouskaya.productMicroservice.entity.dto.FirmParams;
+import pl.dziadkouskaya.productMicroservice.service.FirmService;
 
 import java.util.List;
 import java.util.UUID;

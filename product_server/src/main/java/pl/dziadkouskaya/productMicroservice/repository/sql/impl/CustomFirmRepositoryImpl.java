@@ -1,4 +1,4 @@
-package pl.dziadkouskaya.graphql.repository.sql.impl;
+package pl.dziadkouskaya.productMicroservice.repository.sql.impl;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -6,14 +6,14 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
-import pl.dziadkouskaya.graphql.entity.Firm;
-import pl.dziadkouskaya.graphql.repository.sql.CustomFirmRepository;
+import pl.dziadkouskaya.productMicroservice.entity.Firm;
+import pl.dziadkouskaya.productMicroservice.repository.sql.CustomFirmRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Objects.nonNull;
-import static pl.dziadkouskaya.graphql.utils.StringOperations.createSearchingRequest;
+import static pl.dziadkouskaya.productMicroservice.utils.StringOperations.createSearchingRequest;
 
 public class CustomFirmRepositoryImpl implements CustomFirmRepository {
     @PersistenceContext

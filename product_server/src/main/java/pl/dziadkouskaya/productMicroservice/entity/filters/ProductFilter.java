@@ -1,11 +1,11 @@
-package pl.dziadkouskaya.graphql.entity.filters;
+package pl.dziadkouskaya.productMicroservice.entity.filters;
 
 import jakarta.persistence.Enumerated;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
-import pl.dziadkouskaya.graphql.entity.enums.ProductType;
+import pl.dziadkouskaya.productMicroservice.entity.enums.ProductType;
 
 @Data
 @Jacksonized

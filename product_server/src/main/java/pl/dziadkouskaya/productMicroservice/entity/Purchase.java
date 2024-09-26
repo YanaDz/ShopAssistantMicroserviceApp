@@ -1,4 +1,4 @@
-package pl.dziadkouskaya.graphql.entity;
+package pl.dziadkouskaya.productMicroservice.entity;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;

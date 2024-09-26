@@ -1,4 +1,4 @@
-package pl.dziadkouskaya.graphql.repository.sql.impl;
+package pl.dziadkouskaya.productMicroservice.repository.sql.impl;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -6,13 +6,13 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
-import pl.dziadkouskaya.graphql.entity.Firm;
-import pl.dziadkouskaya.graphql.entity.Seller;
-import pl.dziadkouskaya.graphql.repository.sql.CustomSellerRepository;
+import pl.dziadkouskaya.productMicroservice.entity.Firm;
+import pl.dziadkouskaya.productMicroservice.entity.Seller;
+import pl.dziadkouskaya.productMicroservice.repository.sql.CustomSellerRepository;
 
 import java.util.List;
 
-import static pl.dziadkouskaya.graphql.utils.StringOperations.createSearchingRequest;
+import static pl.dziadkouskaya.productMicroservice.utils.StringOperations.createSearchingRequest;
 
 public class CustomSellerRepositoryImpl implements CustomSellerRepository {
     @PersistenceContext

@@ -1,8 +1,8 @@
-package pl.dziadkouskaya.graphql.service;
+package pl.dziadkouskaya.productMicroservice.service;
 
-import pl.dziadkouskaya.graphql.entity.Seller;
-import pl.dziadkouskaya.graphql.entity.dto.SellerDto;
-import pl.dziadkouskaya.graphql.entity.dto.SellerParam;
+import pl.dziadkouskaya.productMicroservice.entity.Seller;
+import pl.dziadkouskaya.productMicroservice.entity.dto.SellerDto;
+import pl.dziadkouskaya.productMicroservice.entity.dto.SellerParam;
 
 import java.util.List;
 import java.util.Optional;

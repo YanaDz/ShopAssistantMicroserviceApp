@@ -1,8 +1,8 @@
-package pl.dziadkouskaya.graphql.service;
+package pl.dziadkouskaya.productMicroservice.service;
 
-import pl.dziadkouskaya.graphql.entity.Firm;
-import pl.dziadkouskaya.graphql.entity.dto.FirmDto;
-import pl.dziadkouskaya.graphql.entity.dto.FirmParams;
+import pl.dziadkouskaya.productMicroservice.entity.Firm;
+import pl.dziadkouskaya.productMicroservice.entity.dto.FirmDto;
+import pl.dziadkouskaya.productMicroservice.entity.dto.FirmParams;
 
 import java.util.List;
 import java.util.UUID;

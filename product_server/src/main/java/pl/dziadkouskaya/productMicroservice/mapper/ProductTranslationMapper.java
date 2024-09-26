@@ -1,17 +1,17 @@
-package pl.dziadkouskaya.graphql.mapper;
+package pl.dziadkouskaya.productMicroservice.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
-import pl.dziadkouskaya.graphql.entity.ProductTranslation;
-import pl.dziadkouskaya.graphql.entity.dto.ProductTranslationDto;
-import pl.dziadkouskaya.graphql.entity.enums.Location;
-import pl.dziadkouskaya.graphql.entity.enums.TranslationType;
-import pl.dziadkouskaya.graphql.entity.param.ProductTranslationParam;
+import pl.dziadkouskaya.productMicroservice.entity.ProductTranslation;
+import pl.dziadkouskaya.productMicroservice.entity.dto.ProductTranslationDto;
+import pl.dziadkouskaya.productMicroservice.entity.enums.Location;
+import pl.dziadkouskaya.productMicroservice.entity.enums.TranslationType;
+import pl.dziadkouskaya.productMicroservice.entity.param.ProductTranslationParam;
 
 import java.util.UUID;
 
-import static pl.dziadkouskaya.graphql.entity.enums.TranslationType.ADDITIONAL;
+import static pl.dziadkouskaya.productMicroservice.entity.enums.TranslationType.ADDITIONAL;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ProductTranslationMapper {

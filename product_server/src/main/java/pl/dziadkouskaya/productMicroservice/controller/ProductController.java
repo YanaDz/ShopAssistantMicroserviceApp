@@ -1,4 +1,4 @@
-package pl.dziadkouskaya.graphql.controller;
+package pl.dziadkouskaya.productMicroservice.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.dziadkouskaya.graphql.entity.dto.ProductDto;
-import pl.dziadkouskaya.graphql.entity.filters.ProductFilter;
-import pl.dziadkouskaya.graphql.entity.param.ProductParams;
-import pl.dziadkouskaya.graphql.service.ProductService;
+import pl.dziadkouskaya.productMicroservice.entity.dto.ProductDto;
+import pl.dziadkouskaya.productMicroservice.entity.filters.ProductFilter;
+import pl.dziadkouskaya.productMicroservice.entity.param.ProductParams;
+import pl.dziadkouskaya.productMicroservice.service.ProductService;
 
 import java.util.List;
 import java.util.UUID;

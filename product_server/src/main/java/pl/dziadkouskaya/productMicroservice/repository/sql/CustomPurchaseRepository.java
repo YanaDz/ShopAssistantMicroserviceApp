@@ -1,7 +1,7 @@
-package pl.dziadkouskaya.graphql.repository.sql;
+package pl.dziadkouskaya.productMicroservice.repository.sql;
 
-import pl.dziadkouskaya.graphql.entity.Purchase;
-import pl.dziadkouskaya.graphql.entity.filters.PurchaseFilter;
+import pl.dziadkouskaya.productMicroservice.entity.Purchase;
+import pl.dziadkouskaya.productMicroservice.entity.filters.PurchaseFilter;
 
 import java.util.List;
 

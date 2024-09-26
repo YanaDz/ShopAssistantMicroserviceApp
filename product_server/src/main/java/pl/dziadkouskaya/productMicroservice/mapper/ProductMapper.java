@@ -1,15 +1,15 @@
-package pl.dziadkouskaya.graphql.mapper;
+package pl.dziadkouskaya.productMicroservice.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
-import pl.dziadkouskaya.graphql.entity.Firm;
-import pl.dziadkouskaya.graphql.entity.Product;
-import pl.dziadkouskaya.graphql.entity.ProductTranslation;
-import pl.dziadkouskaya.graphql.entity.dto.FirmDto;
-import pl.dziadkouskaya.graphql.entity.dto.ProductDto;
-import pl.dziadkouskaya.graphql.entity.dto.ProductTranslationDto;
-import pl.dziadkouskaya.graphql.entity.param.ProductParams;
+import pl.dziadkouskaya.productMicroservice.entity.Firm;
+import pl.dziadkouskaya.productMicroservice.entity.Product;
+import pl.dziadkouskaya.productMicroservice.entity.ProductTranslation;
+import pl.dziadkouskaya.productMicroservice.entity.dto.FirmDto;
+import pl.dziadkouskaya.productMicroservice.entity.dto.ProductDto;
+import pl.dziadkouskaya.productMicroservice.entity.dto.ProductTranslationDto;
+import pl.dziadkouskaya.productMicroservice.entity.param.ProductParams;
 
 import java.util.List;
 

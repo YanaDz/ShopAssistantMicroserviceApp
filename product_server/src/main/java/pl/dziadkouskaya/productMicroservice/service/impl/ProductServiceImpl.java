@@ -1,18 +1,18 @@
-package pl.dziadkouskaya.graphql.service.impl;
+package pl.dziadkouskaya.productMicroservice.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pl.dziadkouskaya.graphql.entity.Product;
-import pl.dziadkouskaya.graphql.entity.ProductTranslation;
-import pl.dziadkouskaya.graphql.entity.dto.ProductDto;
-import pl.dziadkouskaya.graphql.entity.filters.ProductFilter;
-import pl.dziadkouskaya.graphql.entity.param.ProductParams;
-import pl.dziadkouskaya.graphql.exception.ResourceNotFoundException;
-import pl.dziadkouskaya.graphql.mapper.ProductMapper;
-import pl.dziadkouskaya.graphql.repository.sql.ProductRepository;
-import pl.dziadkouskaya.graphql.service.FirmService;
-import pl.dziadkouskaya.graphql.service.ProductService;
-import pl.dziadkouskaya.graphql.service.ProductTranslationService;
+import pl.dziadkouskaya.productMicroservice.entity.Product;
+import pl.dziadkouskaya.productMicroservice.entity.ProductTranslation;
+import pl.dziadkouskaya.productMicroservice.entity.dto.ProductDto;
+import pl.dziadkouskaya.productMicroservice.entity.filters.ProductFilter;
+import pl.dziadkouskaya.productMicroservice.entity.param.ProductParams;
+import pl.dziadkouskaya.productMicroservice.exception.ResourceNotFoundException;
+import pl.dziadkouskaya.productMicroservice.mapper.ProductMapper;
+import pl.dziadkouskaya.productMicroservice.repository.sql.ProductRepository;
+import pl.dziadkouskaya.productMicroservice.service.FirmService;
+import pl.dziadkouskaya.productMicroservice.service.ProductService;
+import pl.dziadkouskaya.productMicroservice.service.ProductTranslationService;
 
 import java.util.List;
 import java.util.UUID;

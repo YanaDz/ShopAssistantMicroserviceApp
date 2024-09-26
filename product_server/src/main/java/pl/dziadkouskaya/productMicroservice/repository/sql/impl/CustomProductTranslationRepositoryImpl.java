@@ -1,4 +1,4 @@
-package pl.dziadkouskaya.graphql.repository.sql.impl;
+package pl.dziadkouskaya.productMicroservice.repository.sql.impl;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -6,17 +6,17 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
-import pl.dziadkouskaya.graphql.entity.ProductTranslation;
-import pl.dziadkouskaya.graphql.entity.enums.Location;
-import pl.dziadkouskaya.graphql.entity.enums.TranslationType;
-import pl.dziadkouskaya.graphql.repository.sql.CustomProductTranslationRepository;
+import pl.dziadkouskaya.productMicroservice.entity.ProductTranslation;
+import pl.dziadkouskaya.productMicroservice.entity.enums.Location;
+import pl.dziadkouskaya.productMicroservice.entity.enums.TranslationType;
+import pl.dziadkouskaya.productMicroservice.repository.sql.CustomProductTranslationRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import static java.util.Objects.nonNull;
-import static pl.dziadkouskaya.graphql.utils.StringOperations.createSearchingRequest;
+import static pl.dziadkouskaya.productMicroservice.utils.StringOperations.createSearchingRequest;
 
 public class CustomProductTranslationRepositoryImpl implements CustomProductTranslationRepository {
     @PersistenceContext

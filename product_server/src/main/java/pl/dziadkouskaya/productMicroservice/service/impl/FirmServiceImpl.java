@@ -1,14 +1,14 @@
-package pl.dziadkouskaya.graphql.service.impl;
+package pl.dziadkouskaya.productMicroservice.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pl.dziadkouskaya.graphql.entity.Firm;
-import pl.dziadkouskaya.graphql.entity.dto.FirmDto;
-import pl.dziadkouskaya.graphql.entity.dto.FirmParams;
-import pl.dziadkouskaya.graphql.exception.ResourceNotFoundException;
-import pl.dziadkouskaya.graphql.mapper.FirmMapper;
-import pl.dziadkouskaya.graphql.repository.sql.FirmRepository;
-import pl.dziadkouskaya.graphql.service.FirmService;
+import pl.dziadkouskaya.productMicroservice.entity.Firm;
+import pl.dziadkouskaya.productMicroservice.entity.dto.FirmDto;
+import pl.dziadkouskaya.productMicroservice.entity.dto.FirmParams;
+import pl.dziadkouskaya.productMicroservice.exception.ResourceNotFoundException;
+import pl.dziadkouskaya.productMicroservice.mapper.FirmMapper;
+import pl.dziadkouskaya.productMicroservice.repository.sql.FirmRepository;
+import pl.dziadkouskaya.productMicroservice.service.FirmService;
 
 import java.util.List;
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package pl.dziadkouskaya.graphql.entity.dto;
+package pl.dziadkouskaya.productMicroservice.entity.dto;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,7 +15,7 @@ import java.util.UUID;
 public class SellerParam {
     private UUID id;
     private String name;
-    private pl.dziadkouskaya.graphql.entity.enums.Location location;
+    private pl.dziadkouskaya.productMicroservice.entity.enums.Location location;
     private String searchUrl;
     private String titleClass;
     private String productUrl;

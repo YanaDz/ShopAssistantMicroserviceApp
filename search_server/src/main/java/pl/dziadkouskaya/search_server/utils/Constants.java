@@ -30,10 +30,12 @@ public class Constants {
     public static final String HREF_ATTRIBUTE = "href";
 
     // default values
-    public static final int PRODUCT_SEARCH_DEFAULT_WAIT = 10000;
+    public static final int DEFAULT_PRODUCT_SEARCH_WAIT = 3000;
     public static final int DEFAULT_INDEX_VALUE = 0;
+    public static final int MIN_LIST_SIZE = 1;
     public static final int LEVENSHTEIN_DISTANCE_THRESHOLD = 30;
     public static final double JARO_WINKLER_SCORE_LIMIT = 0.67;
+    public static final int DEFAULT_NUMBER_OF_THREADS = 8;
 
     //ActiveMQ queues
     public static final String ACTIVEMQ_QUEUE_SELLER_CREATED = "seller.created.queue";

@@ -16,6 +16,7 @@ import pl.dziadkouskaya.search_server.service.SearchService;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,18 +31,18 @@ public class SearchController {
     private SearchFacade searchFacade;
 
     @GetMapping
-    public List<List<SearchResult>> getSearchResults(@RequestParam String searchRequest) throws IOException, InterruptedException {
+    public List<List<SearchResult>> getSearchResults(@RequestParam String searchRequest) throws IOException, InterruptedException, ExecutionException {
         return searchService.getSellerProducts(searchRequest);
     }
 
 
     @PostMapping(value = "/seller", produces = "application/json")
-    public List<EqualProductNames> getSearchResults(@RequestBody SearchParam param) throws IOException, InterruptedException {
+    public List<EqualProductNames> getSearchResults(@RequestBody SearchParam param) throws IOException, InterruptedException, ExecutionException {
         return searchFacade.findProductsFromSellers(param);
     }
 
     @GetMapping(value = "/data", produces = "application/json")
-    public List<EqualProductNames> getComparedResults(@RequestParam String param) throws IOException, InterruptedException {
+    public List<EqualProductNames> getComparedResults(@RequestParam String param) throws IOException, InterruptedException, ExecutionException {
         return searchFacade.findResults(param);
     }
 

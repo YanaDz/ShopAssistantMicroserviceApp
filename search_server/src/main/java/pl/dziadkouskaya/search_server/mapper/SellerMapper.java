@@ -2,16 +2,22 @@ package pl.dziadkouskaya.search_server.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 import pl.dziadkouskaya.search_server.entity.Seller;
 import pl.dziadkouskaya.search_server.entity.SellerElement;
+import pl.dziadkouskaya.search_server.entity.dto.EqualProductNames;
+import pl.dziadkouskaya.search_server.entity.dto.SearchResult;
 import pl.dziadkouskaya.search_server.entity.dto.SellerDto;
 import pl.dziadkouskaya.search_server.entity.dto.SellerElementDto;
 import pl.dziadkouskaya.search_server.entity.params.SellerElementParam;
 import pl.dziadkouskaya.search_server.entity.params.SellerParam;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static java.util.Objects.isNull;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface SellerMapper {
@@ -51,6 +57,10 @@ public interface SellerMapper {
     @Mapping(target = "prices", expression = "java(mapSellerElementsToDto(seller.getPrices()))")
     SellerDto toDto(Seller seller);
 
+    @Mapping(target = "equalProductNames.productName", source = "result.name")
+    @Mapping(target = "equalProductNames.descriptions", expression = "java(addSearchRequestToDescription(result, equalProductNames) )")
+    EqualProductNames toComparedData(SearchResult result, @MappingTarget EqualProductNames equalProductNames);
+
     default List<SellerElement> mapSellerElements(List<SellerElementParam> sellers) {
         return sellers.stream()
             .map(this::toEntity)
@@ -61,5 +71,14 @@ public interface SellerMapper {
         return sellers.stream()
             .map(this::toDto)
             .collect(Collectors.toList());
+    }
+
+    default List<SearchResult> addSearchRequestToDescription(SearchResult result, EqualProductNames equalProductNames) {
+       var descriptions = equalProductNames.getDescriptions();
+       if (isNull(descriptions)) {
+           descriptions = new ArrayList<>();
+       }
+       equalProductNames.addSameProduct(result);
+       return equalProductNames.getDescriptions();
     }
 }

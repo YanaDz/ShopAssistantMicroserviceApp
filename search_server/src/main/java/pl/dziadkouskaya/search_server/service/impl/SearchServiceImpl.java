@@ -10,6 +10,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.stereotype.Service;
 import pl.dziadkouskaya.search_server.entity.Seller;
 import pl.dziadkouskaya.search_server.entity.dto.ComplexTitlePart;
+import pl.dziadkouskaya.search_server.entity.dto.EqualProductNames;
 import pl.dziadkouskaya.search_server.entity.dto.SearchResult;
 import pl.dziadkouskaya.search_server.entity.enums.SellerElementField;
 import pl.dziadkouskaya.search_server.entity.enums.SellerElementPriority;
@@ -18,6 +19,7 @@ import pl.dziadkouskaya.search_server.entity.params.SearchParam;
 import pl.dziadkouskaya.search_server.exception.ResourceNotFoundException;
 import pl.dziadkouskaya.search_server.exception.SellerParsingException;
 import pl.dziadkouskaya.search_server.exception.ShopNotAvailableException;
+import pl.dziadkouskaya.search_server.mapper.SellerMapper;
 import pl.dziadkouskaya.search_server.service.SearchService;
 import pl.dziadkouskaya.search_server.service.SellerService;
 
@@ -26,21 +28,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.Collectors;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
 
+import static java.util.stream.Collectors.toList;
 import static pl.dziadkouskaya.search_server.entity.enums.SellerElementField.PRODUCT_PRICE;
 import static pl.dziadkouskaya.search_server.entity.enums.SellerElementPriority.ADDITIONAL_ELEMENT_EXCLUDING_MAIN;
 import static pl.dziadkouskaya.search_server.entity.enums.SellerElementPriority.ADDITIONAL_INCLUDED_ELEMENT_FIRST;
 import static pl.dziadkouskaya.search_server.entity.enums.SellerElementPriority.ADDITIONAL_INCLUDED_ELEMENT_SECOND;
 import static pl.dziadkouskaya.search_server.entity.enums.SellerElementPriority.MAIN_ELEMENT;
 import static pl.dziadkouskaya.search_server.entity.enums.SellerElementPriority.ONE_ELEMENT;
+import static pl.dziadkouskaya.search_server.utils.Constants.DEFAULT_NUMBER_OF_THREADS;
 import static pl.dziadkouskaya.search_server.utils.Constants.DIV_CONTAINS;
 import static pl.dziadkouskaya.search_server.utils.Constants.DIV_STARTS_WITH;
 import static pl.dziadkouskaya.search_server.utils.Constants.ERROR_PARSING_PRICE;
 import static pl.dziadkouskaya.search_server.utils.Constants.ERROR_PARSING_TITLE;
 import static pl.dziadkouskaya.search_server.utils.Constants.HREF_ATTRIBUTE;
 import static pl.dziadkouskaya.search_server.utils.Constants.LINK;
-import static pl.dziadkouskaya.search_server.utils.Constants.PRODUCT_SEARCH_DEFAULT_WAIT;
+import static pl.dziadkouskaya.search_server.utils.Constants.DEFAULT_PRODUCT_SEARCH_WAIT;
 import static pl.dziadkouskaya.search_server.utils.Constants.SHOP_CONNECTION_IS_NOT_AVAILABLE;
 import static pl.dziadkouskaya.search_server.utils.Constants.SPACE;
 import static pl.dziadkouskaya.search_server.utils.Validation.checkEmptyString;
@@ -50,28 +55,19 @@ import static pl.dziadkouskaya.search_server.utils.Validation.checkStringWithLet
 @Slf4j
 public class SearchServiceImpl implements SearchService {
     private final SellerService sellerService;
+    private final SellerMapper sellerMapper;
 
-    public SearchServiceImpl(SellerService sellerService) {
+    public SearchServiceImpl(SellerService sellerService, SellerMapper sellerMapper) {
         this.sellerService = sellerService;
+        this.sellerMapper = sellerMapper;
     }
 
 
     @Override
-    public List<List<SearchResult>> getSellerProducts(String request) {
+    public List<List<SearchResult>> getSellerProducts(String request) throws ExecutionException, InterruptedException {
         var allSellers = sellerService.getAllSellers();
         log.info("Found {} sellers.", allSellers.size());
-        var products = allSellers.parallelStream()
-            .peek(seller -> log.info("Start getting results from seller {}.", seller.getName()))
-            .map(seller -> {
-                try {
-                    return getSearchResultsFromSellers(request, seller);
-                } catch (InterruptedException | IOException e) {
-                    throw new ShopNotAvailableException(String.format(SHOP_CONNECTION_IS_NOT_AVAILABLE, seller.getName(),
-                        e.getMessage()));
-                }
-            })
-//            .flatMap(List::stream)
-            .toList();
+        var products = getProductFromSellers(allSellers, request, DEFAULT_PRODUCT_SEARCH_WAIT);
         log.info("Received {} products for request {}.", products.size(), request);
         return products;
     }
@@ -120,7 +116,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public List<SearchResult> getSearchResultsFromSellers(String request, Seller seller) throws IOException, InterruptedException {
-        return getSearchResultsFromSellers(request, seller, PRODUCT_SEARCH_DEFAULT_WAIT);
+        return getSearchResultsFromSellers(request, seller, DEFAULT_PRODUCT_SEARCH_WAIT);
     }
 
     @Override
@@ -139,21 +135,18 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public List<List<SearchResult>> getSearchResultsFromSellers(SearchParam param) throws IOException, InterruptedException {
+    public List<List<SearchResult>> getSearchResultsFromSellers(SearchParam param) throws IOException, InterruptedException, ExecutionException {
         var sellers = param.getSellerId().stream()
             .map(sellerService::getSellerById)
             .toList();
-        return sellers.stream()
-            .peek(seller -> log.info("Start receiving info from seller {}.", seller.getName()))
-            .map(seller -> {
-                try {
-                    return getSearchResultsFromSellers(param.getSearchRequest(), seller, param.getTimeWait());
-                } catch (InterruptedException e) {
-                    throw new SellerParsingException("Problems with parsing data from seller {}.", seller);
-                }
-            })
-            .peek(result -> log.info("Received {} products", result.size()))
-        .collect(Collectors.toList());
+        return getProductFromSellers(sellers, param.getSearchRequest(), param.getTimeWait());
+    }
+
+    @Override
+    public List<EqualProductNames> mapSearchResultsToEqualProducts(List<SearchResult> initialData) {
+        return initialData.stream()
+            .map(data -> sellerMapper.toComparedData(data, EqualProductNames.builder().build()))
+            .collect(toList());
     }
 
     private SearchResult buildSearchResult(String seller, String name, String price, String url) {
@@ -240,6 +233,27 @@ public class SearchServiceImpl implements SearchService {
             throw new ResourceNotFoundException(String.format(ERROR_PARSING_PRICE, seller.getName()));
         }
         return product.select(price.get().getElementName()).text();
+    }
+
+    private List<List<SearchResult>> getProductFromSellers(List<Seller> sellers, String searchRequst, int time) throws ExecutionException
+        , InterruptedException {
+        ForkJoinPool customThreadPool = new ForkJoinPool(DEFAULT_NUMBER_OF_THREADS);
+        var results = customThreadPool.submit(() ->
+            sellers.parallelStream()
+                .map(seller -> {
+                    try {
+                        var products = getSearchResultsFromSellers(searchRequst, seller, time);
+                        log.info("Received {} products from seller {}.", products.size(), seller);
+                        return products;
+                    } catch (InterruptedException e) {
+                        throw new SellerParsingException("Problems with parsing data from seller {}.", seller);
+                    }
+                })
+                .collect(toList())
+        ).get();
+        customThreadPool.shutdown();
+        return results;
+
     }
 }
 

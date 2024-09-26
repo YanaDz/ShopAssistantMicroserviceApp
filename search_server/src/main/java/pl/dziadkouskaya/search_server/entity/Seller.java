@@ -14,6 +14,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.ToString;
 import pl.dziadkouskaya.search_server.entity.enums.Location;
 
 import java.util.ArrayList;
@@ -46,9 +47,11 @@ public class Seller extends AuditableEntity {
     private String titleClass;
 
     @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "seller", orphanRemoval = true)
+    @ToString.Exclude
     private List<SellerElement> titleProductElements = new ArrayList<>();
 
     @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "seller", orphanRemoval = true)
+    @ToString.Exclude
     private List<SellerElement> prices = new ArrayList<>();
 
     @Column(name = "product_url")

@@ -15,6 +15,7 @@ import java.util.stream.IntStream;
 
 import static pl.dziadkouskaya.search_server.utils.Constants.JARO_WINKLER_SCORE_LIMIT;
 import static pl.dziadkouskaya.search_server.utils.Constants.LEVENSHTEIN_DISTANCE_THRESHOLD;
+import static pl.dziadkouskaya.search_server.utils.Validation.isAllListsAreEmpty;
 
 
 @Service
@@ -23,7 +24,6 @@ public class ProductComparisonServiceImpl implements ProductComparisonService {
     @Override
     public List<EqualProductNames> findEqualProducts(List<List<SearchResult>> initialResults) {
         List<EqualProductNames> results = new ArrayList<>();
-
         var index = findFirstNonEmptyListIndex(initialResults);
         var lastIndex = initialResults.size() - 1;
 

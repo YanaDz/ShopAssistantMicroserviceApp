@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import pl.dziadkouskaya.search_server.entity.enums.SellerElementField;
 import pl.dziadkouskaya.search_server.entity.enums.SellerElementPriority;
@@ -45,7 +46,10 @@ public class SellerElement extends AuditableEntity {
     @Column(name = "seller_element_field")
     private SellerElementField sellerElementField;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "seller_id")
+    @ToString.Exclude
     private Seller seller;
+
+
 }
